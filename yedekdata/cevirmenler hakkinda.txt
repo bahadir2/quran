@@ -1,0 +1,70 @@
+sunni
+English	Ahmed Ali	Ahmed Ali *	  
+English	Saheeh International	Saheeh International *
+English	Wahiduddin Khan	Wahiduddin Khan *
+
+sunni-geleneksel
+*English	Maududi	Abul Ala Maududi *	  
+English	Pickthall	Mohammed Marmaduke William Pickthall * 
+*English	Daryabadi	Abdul Majid Daryabadi * 
+
+sunni-barelvi **English	Ahmed Raza Khan	Ahmed Raza Khan *	
+metin dosyasi var.
+**English	Yusuf Ali	Abdullah Yusuf Ali *
+
+
+
+
+
+
+
+
+
+ 
+-----------------------------
+sunni yakin 
+English	Shakir	Mohammad Habib Shakir *	
+
+Sünni (Selefi eğilimli)
+English	Mubarakpuri	Safi-ur-Rahman al-Mubarakpuri *
+English	Hilali & Khan	Muhammad Taqi-ud-Din al-Hilali and Muhammad Muhsin Khan *	  
+
+
+sia
+English	Qarai	Ali Quli Qarai
+English	Qaribullah & Darwish	Hasan al-Fatih Qaribullah and Ahmad Darwish
+English	Sarwar	Muhammad Sarwar *	  
+
+musluman degil
+English	Arberry	A. J. Arberry *	
+
+mezhebi bilinmiyor
+English	Itani	Talal Itani	  
+
+
+Evet, bu çevirmenlerin çoğunu biliyorum ve bazıları hakkında Sünni veya Şii mezhebine mensup olup olmadıklarına dair bilgi verebilirim:
+
+### **Sünni Çevirmenler:**
+1. **Ahmed Raza Khan** → **Sünni (Barelvi mezhebi)**
+2. **Daryabadi (Abdul Majid Daryabadi)** → **Sünni**
+3. **Hilali & Khan (Muhammad Taqi-ud-Din al-Hilali & Muhammad Muhsin Khan)** → **Sünni (Selefi görüşe yakın)**
+4. **Maududi (Abul Ala Maududi)** → **Sünni (Hindistan-Pakistan merkezli İslami hareketin öncüsü)**
+5. **Mubarakpuri (Safi-ur-Rahman al-Mubarakpuri)** → **Sünni (Selefi eğilimli)**
+6. **Pickthall (Mohammed Marmaduke Pickthall)** → **Sünni**
+7. **Saheeh International** → **Sünni**
+8. **Sarwar (Muhammad Sarwar)** → **Bu isim İran'da da bilinir, ancak genellikle Sünni olarak kabul edilir.**
+9. **Shakir (Mohammad Habib Shakir)** → **Sünni**
+10. **Wahiduddin Khan** → **Sünni**
+11. **Yusuf Ali (Abdullah Yusuf Ali)** → **Sünni**
+
+### **Şii Çevirmenler:**
+1. **Qarai (Ali Quli Qarai)** → **Şii**
+2. **Qaribullah & Darwish (Hasan al-Fatih Qaribullah & Ahmad Darwish)** → **Bu çeviri genellikle Sünni olarak değerlendirilir, ancak kaynaklara bağlı olarak farklılık gösterebilir.**
+3. **Sarwar (Muhammad Sarwar)** → **Eğer İran merkezli olan kişi kastediliyorsa, Şii olabilir.**
+
+### **Diğer veya Belirsiz:**
+- **Arberry (A. J. Arberry)** → Müslüman değil, akademik bir çevirmen.
+- **Itani (Talal Itani)** → Mezhebi bilinmiyor, ancak modern bir çeviri yaptığı için genellikle tarafsız kabul edilir.
+- **Transliteration (English Transliteration)** → Bu bir çeviri değil, metnin İngilizce transliterasyonu.
+
+Eğer spesifik bir isim hakkında daha fazla detay istersen, bana sorabilirsin! 😊
