@@ -117,7 +117,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     //bar icin
 }
     ?>
-    <!-- public bar u -->
+    <!-- ana menu -->
 <div class="form-group">
         <label for="boxSelect">Library:</label>
         <select id="boxSelect" class="combobox">
