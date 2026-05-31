@@ -30,8 +30,7 @@ if(isset($_POST["B1"]))
                     $stmt->bindValue(':user_id', $ilkkullanici["id"], PDO::PARAM_INT);
                     $stmt->execute();
                     $user_settings = $stmt->fetch(PDO::FETCH_ASSOC);
-
-                    if ($user_settings) {
+					if (!$user_settings) { die("user_settings bos - id: " . $ilkkullanici["id"]); }
 						$_SESSION['loggedin'] = true;
 						$_SESSION['user_id'] = $ilkkullanici["id"];
 						echo '<form id="redirectForm" method="POST" action="index.php">';
