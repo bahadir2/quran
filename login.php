@@ -40,7 +40,6 @@ if(isset($_POST["B1"]))
 						echo '</form>';
 						echo '<script>document.getElementById("redirectForm").submit();</script>';
 						exit;
-					}
 
                     echo '<meta http-equiv="refresh" content="0;URL=index.php">';
                     exit;
