@@ -25,22 +25,8 @@ if(isset($_POST["B1"]))
 			{					
 				if ($ilkkullanici["ustsinif"]>=0) 
 				{
-                    // Kullanıcı ayarlarını yükle
-                    $stmt = $db->prepare("SELECT topicSelect, turkishChecked, swedishChecked, englishChecked, fontSize, searchTerm, searchResults FROM uyem WHERE id = :user_id");
-                    $stmt->bindValue(':user_id', $ilkkullanici["id"], PDO::PARAM_INT);
-                    $stmt->execute();
-                    $user_settings = $stmt->fetch(PDO::FETCH_ASSOC);
-					if (!$user_settings) { die("user_settings bos - id: " . $ilkkullanici["id"]); }
-						$_SESSION['loggedin'] = true;
-						$_SESSION['user_id'] = $ilkkullanici["id"];
-						echo '<form id="redirectForm" method="POST" action="index.php">';
-						foreach ($user_settings as $key => $value) {
-							echo '<input type="hidden" name="' . htmlspecialchars($key) . '" value="' . htmlspecialchars($value) . '">';
-						}
-						echo '</form>';
-						echo '<script>document.getElementById("redirectForm").submit();</script>';
-						exit;
-
+                    $_SESSION['loggedin'] = true;
+                    $_SESSION['user_id'] = $ilkkullanici["id"];
                     echo '<meta http-equiv="refresh" content="0;URL=index.php">';
                     exit;
 								//----------------------------------------------------------------------
