@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faydalı Linkler</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F7F4EE;
+    --bg-card: #FFFFFF;
+    --text-primary: #1A1612;
+    --text-secondary: #5C5248;
+    --text-muted: #9C9188;
+    --border: rgba(92,82,72,0.15);
+    --border-hover: rgba(92,82,72,0.35);
+    --green: #2D6A4F;
+    --green-light: #EAF4EE;
+    --green-text: #1B4332;
+    --blue: #1A5C8A;
+    --blue-light: #E8F2FA;
+    --blue-text: #0D3A5C;
+    --amber: #7A5C18;
+    --amber-light: #FAF0DC;
+    --amber-text: #5C420E;
+    --accent: #8B6914;
+  }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  .container { max-width: 860px; margin: 0 auto; }
+
+  header {
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  header h1 {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  header p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .section { margin-bottom: 2.5rem; }
+
+  .section-label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  }
+
+  .card:hover {
+    border-color: var(--border-hover);
+    box-shadow: 0 4px 16px rgba(26,22,18,0.07);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    font-size: 1.15rem;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .card-name {
+    font-family: 'Lora', serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .badges { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .badge {
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 99px;
+    letter-spacing: 0.02em;
+  }
+
+  .badge-audio { background: var(--green-light); color: var(--green-text); }
+  .badge-text  { background: var(--blue-light);  color: var(--blue-text);  }
+  .badge-tr    { background: var(--amber-light);  color: var(--amber-text); }
+
+  .card-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    font-weight: 300;
+    flex: 1;
+  }
+
+  .card-url {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border);
+    word-break: break-all;
+    font-family: monospace;
+  }
+
+  @media (max-width: 500px) {
+    header h1 { font-size: 1.5rem; }
+    .cards { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>📚 Faydalı Linkler</h1>
+    <p>Kuran okuma ve tecvid öğrenme için seçilmiş kaynaklar</p>
+  </header>
+
+  <div class="section">
+    <p class="section-label">Dünyadan Kuran Siteleri</p>
+    <div class="cards">
+
+      <a class="card" href="https://www.quran.com" target="_blank">
+        <div class="card-icon">📖</div>
+        <p class="card-name">Quran.com</p>
+        <div class="badges">
+          <span class="badge badge-audio">🎧 Ses</span>
+          <span class="badge badge-text">Metin</span>
+        </div>
+        <p class="card-desc">Farklı kıraat ve tefsirlerle çok dilli Kuran platformu. Sure bazlı dinleme ve arama özelliği var.</p>
+        <p class="card-url">quran.com</p>
+      </a>
+
+      <a class="card" href="http://www.theeasyquran.org" target="_blank">
+        <div class="card-icon">🎓</div>
+        <p class="card-name">The Easy Quran</p>
+        <div class="badges">
+          <span class="badge badge-text">Metin</span>
+        </div>
+        <p class="card-desc">Yeni başlayanlar için kelime kelime Kuran öğretimi sunan eğitim odaklı site.</p>
+        <p class="card-url">theeasyquran.org</p>
+      </a>
+
+      <a class="card" href="http://www.livingnoor.com" target="_blank">
+        <div class="card-icon">🌙</div>
+        <p class="card-name">Living Noor</p>
+        <div class="badges">
+          <span class="badge badge-audio">🎧 Ses</span>
+        </div>
+        <p class="card-desc">Kuran tilaveti ve hıfz odaklı İngilizce kaynak sitesi.</p>
+        <p class="card-url">livingnoor.com</p>
+      </a>
+
+      <a class="card" href="https://commons.wikimedia.org/w/index.php?title=File:Madinah_Mushaf.pdf&page=391" target="_blank">
+        <div class="card-icon">📄</div>
+        <p class="card-name">Medine Mushafı</p>
+        <div class="badges">
+          <span class="badge badge-text">PDF</span>
+        </div>
+        <p class="card-desc">Wikimedia üzerinden erişilebilen yüksek kaliteli Medine baskısı mushaf PDF'i.</p>
+        <p class="card-url">commons.wikimedia.org</p>
+      </a>
+
+      <a class="card" href="https://www.boshra.ai/quran/page/601" target="_blank">
+        <div class="card-icon">✨</div>
+        <p class="card-name">Boshra AI Kuran</p>
+        <div class="badges">
+          <span class="badge badge-text">Dijital Mushaf</span>
+        </div>
+        <p class="card-desc">Yapay zeka destekli modern Kuran okuma platformu. Temiz sayfa görünümü sunar.</p>
+        <p class="card-url">boshra.ai/quran</p>
+      </a>
+
+      <a class="card" href="http://www.quran-noor.com" target="_blank">
+        <div class="card-icon">⭐</div>
+        <p class="card-name">Quran Noor</p>
+        <div class="badges">
+          <span class="badge badge-text">Mushaf</span>
+        </div>
+        <p class="card-desc">Noor yazı tipiyle dijital mushaf görüntüleme sitesi.</p>
+        <p class="card-url">quran-noor.com</p>
+      </a>
+
+      <a class="card" href="https://kuran.hayrat.com.tr/kuran-oku/?sayfa=28" target="_blank">
+        <div class="card-icon">🖋️</div>
+        <p class="card-name">Husrev Hattı</p>
+        <div class="badges">
+          <span class="badge badge-tr">🇹🇷 Türkçe</span>
+        </div>
+        <p class="card-desc">Hayrat Vakfı'nın Husrev hattıyla hazırladığı geleneksel Osmanlı hatı mushaf sitesi.</p>
+        <p class="card-url">kuran.hayrat.com.tr</p>
+      </a>
+
+      <a class="card" href="https://www.alim.org/quran/read-mushaf/601/" target="_blank">
+        <div class="card-icon">📚</div>
+        <p class="card-name">Alim.org Kuran</p>
+        <div class="badges">
+          <span class="badge badge-text">Metin</span>
+          <span class="badge badge-audio">🎧 Ses</span>
+        </div>
+        <p class="card-desc">Kuran, hadis ve İslam literatürünü bir arada sunan kapsamlı İslam kütüphanesi.</p>
+        <p class="card-url">alim.org/quran</p>
+      </a>
+
+      <a class="card" href="https://kuran.diyanet.gov.tr/mushaf" target="_blank">
+        <div class="card-icon">🕌</div>
+        <p class="card-name">Diyanet Mushafı</p>
+        <div class="badges">
+          <span class="badge badge-text">Mushaf</span>
+          <span class="badge badge-audio">🎧 Ses</span>
+          <span class="badge badge-tr">🇹🇷 Türkçe</span>
+        </div>
+        <p class="card-desc">Diyanet İşleri Başkanlığı'nın resmi dijital mushaf portalı. Ses ve meal özellikleri mevcut.</p>
+        <p class="card-url">kuran.diyanet.gov.tr/mushaf</p>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <p class="section-label">Tecvid Siteleri</p>
+    <div class="cards">
+
+      <a class="card" href="https://yenielifba.com/" target="_blank">
+        <div class="card-icon">🔤</div>
+        <p class="card-name">Yeni Elifba</p>
+        <div class="badges">
+          <span class="badge badge-tr">🇹🇷 Türkçe</span>
+        </div>
+        <p class="card-desc">Sıfırdan Kuran okuma öğretimi için elifba ve tecvid dersleri sunan Türkçe site.</p>
+        <p class="card-url">yenielifba.com</p>
+      </a>
+
+      <a class="card" href="https://suffagah.com/kuran-i-kerimdeki-durak-isaretleri-ve-anlamlari" target="_blank">
+        <div class="card-icon">⏸️</div>
+        <p class="card-name">Durak İşaretleri</p>
+        <div class="badges">
+          <span class="badge badge-tr">🇹🇷 Türkçe</span>
+        </div>
+        <p class="card-desc">Kuran'daki tüm durak işaretleri ve anlamlarını açıklayan ayrıntılı rehber.</p>
+        <p class="card-url">suffagah.com</p>
+      </a>
+
+      <a class="card" href="https://www.fikriyat.com/ilahiyat/tecvid/2021/05/28/fatiha-suresi-tecvid-uygulamasi" target="_blank">
+        <div class="card-icon">📝</div>
+        <p class="card-name">Fatiha Tecvid</p>
+        <div class="badges">
+          <span class="badge badge-tr">🇹🇷 Türkçe</span>
+        </div>
+        <p class="card-desc">Fatiha suresi üzerinden tecvid kurallarını pratik örneklerle anlatan makale.</p>
+        <p class="card-url">fikriyat.com</p>
+      </a>
+
+      <a class="card" href="https://kuran.diyanet.gov.tr/elifba" target="_blank">
+        <div class="card-icon">🕌</div>
+        <p class="card-name">Diyanet Elifba</p>
+        <div class="badges">
+          <span class="badge badge-tr">🇹🇷 Türkçe</span>
+        </div>
+        <p class="card-desc">Diyanet İşleri Başkanlığı'nın resmi elifba ve tecvid öğretim portalı.</p>
+        <p class="card-url">kuran.diyanet.gov.tr/elifba</p>
+      </a>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuran Tecvid İşaretleri Açıklamaları</title>
+<style>
+  body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 1rem; }
+  .grup-baslik { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: #888; margin: 2rem 0 0.75rem; padding-bottom: 6px; border-bottom: 0.5px solid #ddd; }
+  .madde { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid #eee; }
+  .madde:last-child { border-bottom: none; }
+  .num { min-width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .num-durak  { background: #EAF3DE; color: #3B6D11; }
+  .num-uzatma { background: #E6F1FB; color: #185FA5; }
+  .num-telaf  { background: #FAEEDA; color: #854F0B; }
+  .num-ozel   { background: #FBEAF0; color: #993556; }
+  .baslik { font-size: 15px; font-weight: 500; margin-bottom: 3px; }
+  .aciklama { font-size: 13px; color: #555; line-height: 1.6; }
+  .not-kutu { margin-top: 8px; padding: 8px 12px; background: #f5f5f5; border-left: 3px solid #ccc; font-size: 12px; color: #555; line-height: 1.6; }
+  .not-kutu a { color: #185FA5; }
+  .etiket { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; margin-right: 6px; }
+  .etiket-durak  { background: #EAF3DE; color: #3B6D11; }
+  .etiket-uzatma { background: #E6F1FB; color: #185FA5; }
+  .etiket-telaf  { background: #FAEEDA; color: #854F0B; }
+  .etiket-ozel   { background: #FBEAF0; color: #993556; }
+  .etiket-uyari  { background: #FCEBEB; color: #A32D2D; }
+  .etiket-not    { background: #e8e8e8; color: #444; }
+  .resim-link { color: #185FA5; text-decoration: underline dotted; cursor: pointer; font-size: 12px; margin-left: 6px; }
+  .resim-link:hover { color: #0c447c; }
+
+  /* Lightbox */
+  #lightbox { display:none; position:fixed; inset:0; background:rgba(0,0,0,.75); z-index:9999; align-items:center; justify-content:center; }
+  #lightbox.aktif { display:flex; }
+  #lightbox-icerik { position:relative; max-width:90vw; max-height:90vh; background:#fff; border-radius:8px; padding:1rem; box-shadow:0 8px 32px rgba(0,0,0,.4); }
+  #lightbox-resim { display:block; max-width:80vw; max-height:80vh; object-fit:contain; border-radius:4px; }
+  #lightbox-baslik { text-align:center; margin-top:.6rem; font-size:13px; color:#555; }
+  #lightbox-kapat { position:absolute; top:-.8rem; right:-.8rem; width:28px; height:28px; border-radius:50%; background:#333; color:#fff; border:none; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; }
+</style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div id="lightbox" onclick="lightboxKapat(event)">
+  <div id="lightbox-icerik">
+    <button id="lightbox-kapat" onclick="lightboxKapat(event)">&times;</button>
+    <img id="lightbox-resim" src="" alt="">
+    <div id="lightbox-baslik"></div>
+  </div>
+</div>
+
+<h2>Kuran Tecvid İşaretleri Açıklamaları</h2>
+
+<!-- GRUP 1 -->
+<p class="grup-baslik">Grup 1 — Durak işaretleri</p>
+
+<div class="madde">
+  <div class="num num-durak">1</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-uyari">Lamelif durağı</span>Kesinlikle durulmamalıdır (06D9)</div>
+    <div class="aciklama">Kesinlikle durulmaması gereğini ifade eder. Eğer lamelif harfinin olduğu yerde durulursa mutlaka geriden alınması gerekir. Zira anlam bozulur. <span class="resim-link" onclick="resimAc('resim/01.jpg','1. Lamelif durağı')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">2</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Lâzım durak</span>Durulması zorunludur (06E2)</div>
+    <div class="aciklama">Geçilirse mana bozulur. Üzerinde bulunduğu yerde mutlaka durulmalıdır. <span class="resim-link" onclick="resimAc('resim/02.jpg','2. Lâzım durak')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">3</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Mutlak durak</span>Durulması evlâdır — tek tâ (06DC)</div>
+    <div class="aciklama">Durmanın mutlak olduğuna işaret eder, lâzım veya câiz gibi bir kayıtla sınırlandırılmamıştır. Üzerinde durulan kelimenin sonrasından okunmaya başlanırsa mana güzel olur. <span class="resim-link" onclick="resimAc('resim/03.jpg','3. Mutlak durak — tek tâ')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">4</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Câiz durak</span>Durmak da geçmek de câizdir, durmak evlâdır — sad (06D6)</div>
+    <div class="aciklama">Böyle yerlerde durmak da geçmek de câizdir; fakat durmak daha evlâdır. <span class="resim-link" onclick="resimAc('resim/04.jpg','4. Câiz durak — sad')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">5</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Câiz durak</span>Durmak da geçmek de câizdir, durmak evlâdır — küçük yuvarlak (06DA)</div>
+    <div class="aciklama">Böyle yerlerde durmak da geçmek de câizdir; fakat durmak daha evlâdır. <span class="resim-link" onclick="resimAc('resim/05.jpg','5. Câiz durak — küçük yuvarlak')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">6</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Câiz durak</span>Durmak da geçmek de câizdir, namazda rükû yapılabilir — ayn (06DF)</div>
+    <div class="aciklama">Durulması caizdir ve namazda rükû yapılabilir. <span class="resim-link" onclick="resimAc('resim/06.jpg','6. Câiz durak — ayn')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">7</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Murakkab durak</span>Geçmek daha iyidir (06D7)</div>
+    <div class="aciklama">Geçmek de durmak da câizdir; fakat geçmek daha iyidir. <span class="resim-link" onclick="resimAc('resim/07.jpg','7. Murakkab durak')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">8</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Câiz durak</span>Geçilmesi evlâdır, durulması caizdir — meem (06D8)</div>
+    <div class="aciklama">Geçilmesi daha iyidir; fakat durulması da câizdir. <span class="resim-link" onclick="resimAc('resim/08.jpg','8. Câiz durak — meem')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">9</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Sekte</span>Nefes almadan dur ve oku (06D4)</div>
+    <div class="aciklama">Nefes almadan kısa bir an durulur ve okumaya devam edilir. Kur'an-ı Kerim'de 4 yerde bulunur. <span class="resim-link" onclick="resimAc('resim/09.jpg','9. Sekte')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-durak">10</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-durak">Tek kif</span>Durulması evlâdır, geçilmesi caizdir (06E0 — قف)</div>
+    <div class="aciklama">Durulması evlâdır, geçilmesi caizdir. <span class="resim-link" onclick="resimAc('resim/10.jpg','10. Tek kif')">resim</span></div>
+  </div>
+</div>
+
+<!-- GRUP 2 -->
+<p class="grup-baslik" style="margin-top:2.5rem">Grup 2 — Uzatma işaretleri</p>
+
+<div class="madde">
+  <div class="num num-uzatma">11</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-uzatma">Uzatma</span>Bir elif uzatma — üstten (0670)</div>
+    <div class="aciklama">Harfin üzerine gelen dik çizgi, o harfi bir elif miktarı uzatır. <span class="resim-link" onclick="resimAc('resim/11.jpg','11. Bir elif uzatma üstten')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-uzatma">12</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-uzatma">Uzatma</span>Bir elif uzatma — alttan (06EA)</div>
+    <div class="aciklama">Harfin altına gelen dik çizgi, o harfi bir elif miktarı uzatır. <span class="resim-link" onclick="resimAc('resim/12.jpg','12. Bir elif uzatma alttan')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-uzatma">13</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-uzatma">Kısa oku</span>Uzatmadan kısa oku (06EC — قصر)</div>
+    <div class="aciklama">Uzun okunabilecek yerde kısaltarak oku demektir. <span class="resim-link" onclick="resimAc('resim/13.jpg','13. Kısa oku')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-uzatma">14</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-uzatma">Uzun oku</span>Kısaltmadan uzun oku (06EB — مد)</div>
+    <div class="aciklama">Kısa okunabilecek yerde uzatarak oku demektir. <span class="resim-link" onclick="resimAc('resim/14.jpg','14. Uzun oku')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-uzatma">15</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-uzatma">Uzatma</span>Dört elif uzatma (0653)</div>
+    <div class="aciklama">Harfin üzerine gelen yatay çizgi, üzerinde bulunduğu harfi dört elif miktarı uzatır. <span class="resim-link" onclick="resimAc('resim/15.jpg','15. Dört elif uzatma')">resim</span></div>
+  </div>
+</div>
+
+<!-- GRUP 3 -->
+<p class="grup-baslik" style="margin-top:2.5rem">Grup 3 — Telaffuz / özel okuyuş işaretleri</p>
+
+<div class="madde">
+  <div class="num num-telaf">16</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-telaf">İmale</span>Fethayı kesreye, elif'i yâ'ya yaklaştırarak oku (06ED+06D9)</div>
+    <div class="aciklama">Sözlükte "meylettirmek" demektir. Fethanın kesreye, elifin "yâ"ya yaklaştırılarak okunmasıdır. Türkçedeki "e" sesine benzer. Hafs rivayetinde yalnızca bir kelimede bulunur ("Mecrâha" değil "Mecrêhâ"). <span class="resim-link" onclick="resimAc('resim/16.jpg','16. İmale')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-telaf">17</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-telaf">İdgam</span>İki harfi birleştirerek oku (06ED+06D7)</div>
+    <div class="aciklama">"Be" (ب) cezimli, "Mim" (م) harekeliyken "Be" tamamen "Mim"e dönüştürülerek gunneli okunur. "İrkeb me'anâ" değil "İrkem-me'anâ" şeklinde okunur. <span class="resim-link" onclick="resimAc('resim/17.jpg','17. İdgam')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-telaf">18</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-telaf">İşmam</span>Dudak hareketi ile ötre işareti yap (06ED+06D6)</div>
+    <div class="aciklama">Sözlükte "koklatmak" demektir. Şeddeli nunu okurken dudaklar anlık olarak ötre pozisyonuna getirilir, ses çıkarılmadan görsel bir ötre yapılır. "Te'mennâ" değil "Te'men-(dudak hareketi)-nâ" şeklinde okunur. <span class="resim-link" onclick="resimAc('resim/18.jpg','18. İşmam')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-telaf">19</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-telaf">Teshil</span>İkinci hemzeyi yumuşatarak oku (06ED+06D8)</div>
+    <div class="aciklama">Sözlükte "kolaylaştırmak" demektir. Yan yana gelen iki hemzeden ikincisi, hemze ile elif arasında yumuşak bir sesle okunur. "E-a'cemiyyün" değil "E-ecemiyyün" şeklinde söylenir. <span class="resim-link" onclick="resimAc('resim/19.jpg','19. Teshil')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-telaf">20</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-telaf">Sin ile oku</span>Sad harfi sin gibi okunmalı (06E3)</div>
+    <div class="aciklama">Bu işaretin bulunduğu yerde "Sad" harfi mutlaka "Sin" sesiyle okunmalıdır. <span class="resim-link" onclick="resimAc('resim/20.jpg','20. Sin ile oku')">resim</span></div>
+    <div class="not-kutu">
+      <span class="etiket etiket-not" style="margin-bottom:4px;display:inline-block;">Not</span>
+      Türkçe basım Kur'an'larda gösterilmemekle birlikte, Tur Suresi 52:37. ayette geçen
+      <span style="font-size:15px;direction:rtl;display:inline-block;vertical-align:middle;margin:0 4px;">الْمُصَيْطِرُونَ</span>
+      kelimesinde de benzer bir durum söz konusudur: "Sad" (ص) hem sad hem de sin (س) olarak okunmak caizdir.
+      Kaynak: <a href="https://corpus.quran.com/wordbyword.jsp?chapter=52&verse=37#(52:37:7)" target="_blank">corpus.quran.com — Tur 52:37</a>
+    </div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-telaf">21</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-telaf">Tenvin geçiş</span>Tenvinden sonraki kelimeye bağlantı (06E8 — نِ)</div>
+    <div class="aciklama">Sonu tenvinli kelimelerden bir sonraki kelimeye geçişi sağlar. <span class="resim-link" onclick="resimAc('resim/21.jpg','21. Tenvin geçiş')">resim</span></div>
+  </div>
+</div>
+
+<!-- GRUP 4 -->
+<p class="grup-baslik" style="margin-top:2.5rem">Grup 4 — Özel durum işaretleri</p>
+
+<div class="madde">
+  <div class="num num-ozel">22</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-ozel">Üç noktalı lamelif durağı</span>Kesinlikle durulmamalı + üç noktalı durak (06D9+06DB)</div>
+    <div class="aciklama">Kesinlikle durulmaması gereken yerde üç noktalı durak işaretiyle birlikte gelir. <span class="resim-link" onclick="resimAc('resim/22.jpg','22. Üç noktalı lamelif durağı')">resim</span></div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-ozel">23</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-ozel">Birinde durul ötekinde geç</span>Murakkab durak (06DA+06DB)</div>
+    <div class="aciklama">Birbirine yakın iki yerde bulunur. Sayet iki işaret de aynı ise sadece istediğin birinde durabilirsin. Sayet farklı işaretler geliyorsa bu duraktan geçmelisin.
+      <span class="resim-link" onclick="resimAc('resim/23a.jpg','23a. Birinde durul ötekinde geç')">resim a</span>
+      <span class="resim-link" onclick="resimAc('resim/23b.jpg','23b. Birinde durul ötekinde geç')">resim b</span>
+      <span class="resim-link" onclick="resimAc('resim/23c.jpg','23c. Birinde durul ötekinde geç')">resim c</span>
+    </div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-ozel">24</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-ozel">Tâ + üç yıldız</span>Buradaki durak daha evlâdır (06DC+06DB)</div>
+    <div class="aciklama">Önceki üç noktalı durak yerine buradaki üç noktalı durakta durmak daha evlâdır. Sayet aynı işaretlerden varsa istediğin birinde durabilirsin.
+      <span class="resim-link" onclick="resimAc('resim/24a.jpg','24a. Tâ + üç yıldız')">resim a</span>
+      <span class="resim-link" onclick="resimAc('resim/24b.jpg','24b. Tâ + üç yıldız')">resim b</span>
+    </div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-ozel">25</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-ozel">Kif + üç yıldız</span>Buradaki durak daha evlâdır (06E0+06DB — قف)</div>
+    <div class="aciklama">Önceki üç noktalı durak yerine buradaki üç noktalı durakta durmak daha evlâdır.
+      <span class="resim-link" onclick="resimAc('resim/25a.jpg','25a. Kif + üç yıldız')">resim a</span>
+      <span class="resim-link" onclick="resimAc('resim/25b.jpg','25b. Kif + üç yıldız')">resim b</span>
+      <span class="resim-link" onclick="resimAc('resim/25c.jpg','25c. Kif + üç yıldız')">resim c</span>
+    </div>
+  </div>
+</div>
+
+<div class="madde">
+  <div class="num num-ozel">26</div>
+  <div>
+    <div class="baslik"><span class="etiket etiket-ozel">Üç noktalı gili durağı</span>Geçmek daha iyi + üç noktalı durak (06D7+06DB)</div>
+    <div class="aciklama">Geçmek daha iyi olan yerde üç noktalı durak işaretiyle birlikte gelir. <span class="resim-link" onclick="resimAc('resim/26.jpg','26. Üç noktalı gili durağı')">resim</span></div>
+  </div>
+</div>
+
+<script>
+  function resimAc(dosya, baslik) {
+    document.getElementById('lightbox-resim').src = dosya;
+    document.getElementById('lightbox-baslik').textContent = baslik;
+    document.getElementById('lightbox').classList.add('aktif');
+  }
+
+  function lightboxKapat(e) {
+    if (!e || e.target === document.getElementById('lightbox') || e.currentTarget === document.getElementById('lightbox-kapat')) {
+      document.getElementById('lightbox').classList.remove('aktif');
+    }
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('aktif');
+  });
+</script>
+
+</body>
+</html>

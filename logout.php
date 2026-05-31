@@ -1,6 +1,9 @@
 <?php
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once "conn.php"; // Veritabanı bağlantısı dosyanız
 
 // Enable error reporting for debugging
@@ -10,40 +13,18 @@ ini_set('display_errors', 1);
 // Start output buffering
 ob_start();
 
-//veriler GET olarak gonderilseydi
-//logout.php?turkishChecked=0&swedishChecked=0&englishChecked=1&fontSize=44&searchTerm=
-//logout.php?turkishChecked=1&swedishChecked=0&englishChecked=1&fontSize=40&searchTerm=rahman&topicSelect=1
-
-// JavaScript'ten gelen verileri al
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-$_SESSION = array();
-session_destroy();
-    //echo 'hello';exit;
-    $data = json_decode(file_get_contents('php://input'), true);
-    
     // Gelen verileri değişkenlere ata
-    $turkish = isset($data['turkishChecked']) ? (int)$data['turkishChecked'] : 0;
-    $swedish = isset($data['swedishChecked']) ? (int)$data['swedishChecked'] : 0;
-    $english = isset($data['englishChecked']) ? (int)$data['englishChecked'] : 0;
-    $font_size = isset($data['fontSize']) ? (int)$data['fontSize'] : 32;
-    $search_term = isset($data['searchTerm']) ? $data['searchTerm'] : null;
-    $search_results = isset($data['searchTerm']) ? $data['searchResults'] : null;
-    $topic_select = isset($data['topicSelect']) ? (int)$data['topicSelect'] : 0;
+    $styleValue = isset($_POST['styleValue']) ? $_POST['styleValue'] : null;
+    $turkish = isset($_POST['turkishChecked']) ? (int)$_POST['turkishChecked'] : 0;
+    $swedish = isset($_POST['swedishChecked']) ? (int)$_POST['swedishChecked'] : 0;
+    $english = isset($_POST['englishChecked']) ? (int)$_POST['englishChecked'] : 0;
+    $font_size = isset($_POST['fontSize']) ? (int)$_POST['fontSize'] : 32;
+    $search_term = isset($_POST['searchTerm']) ? $_POST['searchTerm'] : null;
+    $search_results = isset($_POST['searchResults']) ? $_POST['searchResults'] : null;
+    $topic_select = isset($_POST['topicSelect']) ? (int)$_POST['topicSelect'] : 0;
 
-    // Test için JSON formatında çıktı gönder
-    header('Content-Type: application/json');
-    echo json_encode([
-        'turkish' => $turkish,
-        'swedish' => $swedish,
-        'english' => $english,
-        'font_size' => $font_size,
-        'search_term' => $search_term,
-        'search_results' => $search_results,
-        'topic_select' => $topic_select
-    ]);
-    ob_end_flush(); // Flush the output buffer
-    exit; // Stop further execution to ensure the output is sent to the client
 
     // Kullanıcı oturum bilgilerini kontrol et
     if (isset($_SESSION['user_id'])) {
@@ -55,10 +36,12 @@ session_destroy();
                                   swedishChecked = :swedish, 
                                   englishChecked = :english, 
                                   fontSize = :font_size, 
+                                  styleValue = :styleValue,
                                   searchTerm = :search_term,
                                   searchResults = :search_results,
                                   topicSelect = :topic_select
                               WHERE id = :user_id");
+        $stmt->bindValue(':styleValue', $styleValue, PDO::PARAM_STR);
         $stmt->bindValue(':turkish', $turkish, PDO::PARAM_INT);
         $stmt->bindValue(':swedish', $swedish, PDO::PARAM_INT);
         $stmt->bindValue(':english', $english, PDO::PARAM_INT);
@@ -72,14 +55,15 @@ session_destroy();
 }
 
 ?>
-<!--
-<p id="mesaj"></p>
-<script>
-document.getElementById("mesaj").innerText = "<?php echo $font_size; ?>";
-</script>
--->
-<?php
 
+<p id="mesaj1"></p><p id="mesaj2"></p>
+<script>
+document.getElementById("mesaj1").innerText = "<?php echo $font_size; ?>";
+document.getElementById("mesaj2").innerText = "<?php echo $_POST['fontSize']; ?>";
+
+</script>
+
+<?php
 // Oturumu sonlandır
 $_SESSION = array();
 session_destroy();

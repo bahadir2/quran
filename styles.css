@@ -1,13 +1,39 @@
-      body {
+@font-face {
+  font-family: 'KFGQPC Uthmanic Script HAFS';
+  src: url('fonts/KFGQPC-Uthmanic-Script-HAFS-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Scheherazade New';
+  src: url('fonts/ScheherazadeNew-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+body {
           font-family: 'Segoe UI', sans-serif;
           background-color: #f8f4e3;
           margin: 20px;
           text-align: center;
           padding: 18px;
-        padding-top: 60px;
-            /* Barın yüksekliğine eşit bir boşluk bırakın */
-            border-radius: 0; /* Köşeleri düzleştir */
+          //padding-top: calc(var(--navbar-height) + 10px); /* Bar için minimum boşluk -> navbar yüksekliği kadar üst boşluk bırak */
+          padding-top: 60px;
+          border-radius: 0; /* Köşeleri düzleştir */
       }
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 70px;
+    }
+}
+      
+
+
 
         .navbar {
             position: fixed;
@@ -17,56 +43,38 @@
             z-index: 1000;
             background-color: #5C4033;
             color: #fdfaf5;
-            padding: 12px 16px;
+            padding: 2px 16px;
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 20px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            gap: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
             border-radius: 0 !important;
             /* Köşeleri düzleştir */
+            /* Sabit yükseklik, body'deki padding-top ile uyumlu olsun */
+            height: var(--navbar-height);
+            transition: top 0.3s ease;
         }
-      .turkish {
-          color: red;
-          font-size: 18px;
-          margin-right: 10px;
-      }
 
-          .blok-turkish {
-              color: red;
-              font-size: 18px;
-              margin-right: 10px;
-          }
+        .blokturkish, .turkish {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .blokswedish, .swedish {
+            color: #006400;
+            font-size: 18px;
+            margin-right: 10px;
+        }
 
-      .swedish {
-          color: #006400;
-          font-size: 18px;
-          margin-right: 10px;
-      }
+        .blokenglish, .english {
+            color: rgb(0, 153, 255);//black;
+            font-size: 18px;
+            margin-right: 10px;
+        }
 
-      .english {
-          color: black;
-          font-size: 18px;
-          margin-right: 10px;
-      }
+        
 
-         .navbar {
-             background-color: #5C4033;
-             padding: 8px 12px;
-             //border-radius: 10px;
-             color: #fdfaf5;
-             display: flex;
-             flex-wrap: wrap;
-             align-items: flex-start;
-             /* Elemanları üst hizala */
-             gap: 20px;
-             /* Elemanlar arasındaki boşluk */
-            justify-content: center;
-                /* Yatayda ortala */
-                align-items: center;
-                /* Dikeyde ortala */
-                
-         }
     
          .navbar .form-group {
              display: flex;
@@ -160,20 +168,25 @@
           display: none;
           background-color: #fff;
           padding: 20px;
-          margin-top: 10px;
           border-radius: 10px;
-          box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        position: fixed;
-        transform: translateX(-50%);
-        left: 50%;
+          box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+          z-index: 9999;
+          position: fixed;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 400px;
+          max-height: 80vh;
+          overflow-y: auto;
+          margin: 0;
+}
 
-      }
-
-  #settingsBar {
-      width: 1200px !important;
-      /* Genişliği artırın */
-  }
+.language-options {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px;
+          justify-content: center;
+}
 
       .highlighted-label {
           color: #8e4a1d;
@@ -230,96 +243,88 @@
           /* Kenarlık */
       }
 
-      .arabic {
-          font-family: 'Traditional Arabic';
-        //font-family: 'KFGQPC Uthmanic Script', 'Scheherazade', 'Traditional Arabic', serif;
-            //font-family: 'Amiri';
-          font-size: 32px;
-          letter-spacing: 0.1px;
-          line-height: 1.8;
-          color: #006600;
-      }
+/* Font'ların önceden yüklenmesini sağla */
+.arabic, .arabic2 {
+  /* Varsayılan font ailesi - ilk sırada Mushaf */
+  font-family: 'KFGQPC Uthmanic Script HAFS', 'Scheherazade New', 'Lateef', 'Traditional Arabic', serif;
+  font-size: 32px;
+  letter-spacing: 0.1px;
+  line-height: 1.8;
+  color: #006600;
+  direction: rtl;
+}
 
-/*      .arabic:hover {
-          background-color: #eef;
-          cursor: pointer;
-      }*/
+.arabic:hover {
+  background-color: #eef;
+  cursor: pointer;
+}
 
-      .arabic.active {
-          background-color: #cce;
-          color: #003300;
-          border: 1px solid #006600;
-      }
+.arabic.active {
+  background-color: #cce;
+  color: #003300;
+  border: 1px solid #006600;
+}
 
-          .arabic2 {
-              font-family: 'Traditional Arabic';
-              //font-family: 'KFGQPC Uthmanic Script', 'Scheherazade', 'Traditional Arabic', serif;
-              //font-family: 'Amiri';
-              font-size: 32px;
-              letter-spacing: 0.1px;
-              line-height: 1.8;
-              color: #006600;
-          }
-          
-          .arabic2.active {
-              background-color: #cce;
-              color: #003300;
-              border: 1px solid #006600;
-          }
-
+.arabic2.active {
+  background-color: #cce;
+  color: #003300;
+  border: 1px solid #006600;
+}
       .normal {
-          //display: inline-block;
-          width: 15px;
-          /* Dairenin genişliği */
-          height: 15px;
-          /* Dairenin yüksekliği */
-          line-height: 15px;
-          /* Yükseklikle hizalama */
-          text-align: center;
-          /* Metin ortalama */
-          border-radius: 35%;
-          /* Daire oluşturma */
-          background-color: #182D47;
-          /* Daire arka plan rengi #775F2F*/
-          color: white;
-          font-size: 12px;
-          /* Rakam boyutu */
-          font-weight: bold;
-          /* Rakam kalınlığı */
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-          /* Gölgelendirme */
-          margin: 5px;
-          /* Daireler arasında boşluk */
-          border: 3px solid #182D47;
-          /* Kenar rengi ve kalinligi #182D47 */
-          transition: all 0.3s;
-          /* Geçiş efekti */
-          position: relative;
-            display: inline-block;
-            cursor: pointer;
-            margin: 10px 0;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 6px;           /* İçerik boşluğu */
+  min-width: 15px;            /* En az genişlik */
+  height: auto;               /* İçeriğe göre yükseklik */
+  font-size: 12px;            /* Rakam boyutu */
+  font-weight: bold;          /* Rakam kalınlığı */
+  background-color: #182D47;  /* Arka plan */
+  color: white;               /* Yazı rengi */
+  border-radius: 35%;         /* Tam daire */
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  border: 3px solid #182D47;  /* Kenarlık */
+  transition: all 0.3s;
+  cursor: pointer;
+  margin: 5px;
+  white-space: nowrap;        /* Satır atlamasın */
+  overflow: visible;           /* Taşmaları gizle */
+  position: relative; /* tooltip'in ankrajı için şart */
+}
 
-            max-width: 110vw; /* Sayfa genişliğini aşmasın */
-            overflow-wrap: break-word; /* Uzun kelimeler taşmasın */
-            bottom: auto;
-      }
 
-      .normal div {
+    .normal div, .secde div {
     visibility: hidden;
-    background-color: #555;
-    color: #fff;
-    text-align: right; /* 👈 Sola hizalama */
-    border-radius: 5px;
-    padding: 10px;
-    position: absolute;
-    z-index: 1;
-    top: 120%;
-    left: 5; /* 👈 Sola yaslama */
     opacity: 0;
     transition: opacity 0.3s;
-    max-width: 300px; /* 👈 Maksimum genişlik */
-    white-space: normal; /* 👈 Uzun metin alt satıra geçsin */
-    word-wrap: break-word; /* 👈 Uzun kelimeler taşmasın */
+    background-color: #555;
+    color: #fff;
+    padding: 10px;
+    border-radius: 0 0 5px 5px;
+    font-size: 14px;
+    font-weight: normal;
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    direction: ltr;                 /* ← ltr kalır */
+    unicode-bidi: plaintext;        /* ← her karakter kendi yönünde */
+    position: fixed;
+    top: 0;
+    bottom: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.normal div span.arabic,
+.secde div span.arabic {
+    display: inline !important;
+}
+
+.normal:hover div, .secde:hover div {
+    visibility: visible;
+    opacity: 1;
 }
 
 
@@ -335,9 +340,7 @@
             
         }
 
-        .normal div span.visible {
-            display: block;
-        }
+
          
 
 
@@ -354,55 +357,27 @@
       }
 */
       .secde {
-          //display: inline-block;
-          width: 15px;
-          /* Dairenin genişliği */
-          height: 15px;
-          /* Dairenin yüksekliği */
-          line-height: 15px;
-          /* Yükseklikle hizalama */
-          text-align: center;
-          /* Metin ortalama */
-          border-radius: 35%;
-          /* Daire oluşturma */
-          background-color: red;
-          /* Daire arka plan rengi #775F2F*/
-          color: white;
-          font-size: 12px;
-          /* Rakam boyutu */
-          font-weight: bold;
-          /* Rakam kalınlığı */
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-          /* Gölgelendirme */
-          margin: 5px;
-          /* Daireler arasında boşluk */
-          border: 3px solid red;
-          /* Kenar rengi ve kalinligi #182D47 */
-          transition: all 0.3s;
-          /* Geçiş efekti */
-          position: relative;
-            display: inline-block;
-            cursor: pointer;
-            margin: 10px 0;
-      }
-
-            .secde div {
-            visibility: hidden;
-    background-color: #555;
-    color: #fff;
-    text-align: right; /* 👈 Sola hizalama */
-    border-radius: 5px;
-    padding: 10px;
-    position: absolute;
-    z-index: 1;
-    top: 120%;
-    left: 5; /* 👈 Sola yaslama */
-    opacity: 0;
-    transition: opacity 0.3s;
-    max-width: 300px; /* 👈 Maksimum genişlik */
-    white-space: normal; /* 👈 Uzun metin alt satıra geçsin */
-    word-wrap: break-word; /* 👈 Uzun kelimeler taşmasın */
+  display: inline-block;
+  padding: 4px 6px; /* Yukarı-aşağı ve sağa-sola boşluk */
+  height: auto; /* Otomatik yükseklik */
+  line-height: normal;
+  text-align: center;
+  border-radius: 35%; /* Daireye yakın görünüm */
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  margin: 5px;
+  border: 3px solid red;
+  transition: all 0.3s;
+  position: relative;
+  cursor: pointer;
+  white-space: nowrap; /* Tek satırda tut */
 }
+
+
+           
 
         .secde:hover div {
             visibility: visible;
@@ -413,9 +388,7 @@
             display: none;
         }
 
-        .secde div span.visible {
-            display: block;
-        }
+
 
 
 
@@ -566,6 +539,12 @@
     font-size: 20px;
 }
 
+.preview-text {
+    direction: rtl;
+    text-align: right;
+    /* diğer mevcut stiller */
+}
+
 .dynamic-font {
     font-size: 1em;
     /* Varsayılan boyut */
@@ -573,12 +552,31 @@
     padding: 5px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
         /* Gölge ekle */
+    /* left yerine right kullanmak için direction düzelt */
+    direction: ltr;  /* ← bunu ekleyin */
 }
-
 
 #pageInput {
     text-align: center;
     /* Metni yatay olarak ortala */
 }
 
-   
+#arabicFontSelect,
+#fontSizeSelect {
+    padding: 6px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    min-width: 120px;
+    margin-top: 5px;
+}
+
+#arabicFontSelect:hover,
+#fontSizeSelect:hover {
+    border-color: #8e5a28;
+}
+
+
+

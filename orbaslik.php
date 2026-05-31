@@ -9,7 +9,7 @@ imagealphablending($image, true);
 imagesavealpha($image, true);
 
 $color = imagecolorallocate($image, 64, 224, 208);
-$font = "font/arial.ttf"; // 'TFF' yerine 'ttf'
+$font = "fonts/arial.ttf"; // 'TFF' yerine 'ttf'
 $fontSize = 20;
 
 $imageWidth = imagesx($image);

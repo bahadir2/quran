@@ -78,12 +78,13 @@ if ($result->num_rows > 0) {
     $selected_surah = $row["sur"];
     $selected_juz = $row["cuz"];
     $selected_verse = $row["ayno"];
-    $id = $row["id"];
-
+    $id = $row["id"];$ayno = $row["ayno"];
+$altbilgi = $row["aciklama"];
     $or = $row["or"];
     $tr = $row["tr"];
     $sv = $row["sv"];
     $en = $row["en"];
+    $dipnot = $row["aciklama2"];
 }
 
 ?>
@@ -93,9 +94,16 @@ if ($result->num_rows > 0) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quran Pages</title>
-     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    
+    <!-- Google Fonts - Seçtiğiniz Arabik fontları -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New:wght@400;500;600;700&family=Lateef:wght@200;300;400;500;600;700;800&family=Mirza:wght@400;500;600;700&family=Katibeh&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css">
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 </head>
 <body>
@@ -144,6 +152,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     onchange="goToPage('pageInput', this.value)" 
     onkeyup="if(event.keyCode===13) goToPage('pageInput', this.value )" 
     autocomplete="off"><button type="button" class="nav-button" onclick="changePage('next')">&raquo;</button>
+    
     </div>
 </div>
     <div class="form-group">
@@ -170,47 +179,81 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     ?>
 <!-- Mevcut link ve form yerine -->
- <div class="action-bar">h
+ <div class="action-bar">
     <button onclick="toggleSettings()" title="Ayarlar" class="action-button">&#9881;</button>
     <a href="info.html" title="Bilgi" target="_blank" class="action-button">&#8505;</a>
     <form id="logoutForm" action="logout.php" method="POST" style="display: inline;">
-        <input type="hidden" name="logout" value="1">
-        <input type="hidden" name="topicSelect" id="topicSelectInput">
-        <input type="hidden" name="turkishChecked" id="turkishCheckedInput">
-        <input type="hidden" name="swedishChecked" id="swedishCheckedInput">
-        <input type="hidden" name="englishChecked" id="englishCheckedInput">
-        <input type="hidden" name="fontSize" id="fontSizeInput">
-        <input type="hidden" name="searchTerm" id="searchTermInput">
-        <input type="hidden" name="searchResults" id="searchResultsInput">
-        <button type="submit" class="action-button logout-button" title="Logout">
-            Logout <!-- Power/Logout simgesi -->
-        </button>
-    </form>
+    <input type="hidden" name="logout" value="1">
+    <input type="hidden" name="topicSelect" id="topicSelectInput">
+    <input type="hidden" name="styleValue" id="styleValue">
+    <input type="hidden" name="arabicFont" id="arabicFontInput">
+    <input type="hidden" name="turkishChecked" id="turkishCheckedInput">
+    <input type="hidden" name="swedishChecked" id="swedishCheckedInput">
+    <input type="hidden" name="englishChecked" id="englishCheckedInput">
+    <input type="hidden" name="fontSize" id="fontSizeInput">
+    <input type="hidden" name="searchTerm" id="searchTermInput">
+    <input type="hidden" name="searchResults" id="searchResultsInput">
+    <button type="submit" class="action-button logout-button" title="Logout">
+        Logout
+    </button>
+</form>
 </div></div>
+
+</div>
 <!-- Ayar Paneli -->
 <div class="settings-bar" id="settingsBar">
-      <div class="language-options">
+  <div class="language-options">
     <label>
         Style<br>
         <select id="style" size="1" onchange="updateLanguages();">
-<option selected>standard</option>
+<option selected>subtitle</option>
+<option>standard</option>
 <option>fast</option>
 <option>single</option>
 </select>
-    </label>
-  <div class="language-options">
-    <label><input type="checkbox" id="turkish" onclick="updateLanguages()"> Türkçe </label>
+
+        </label>
     <span class="divider"></span>
-    <label><input type="checkbox" id="swedish" onclick="updateLanguages()"> Svenska</label>
+    <label>
+        <input type="checkbox" id="turkish" onclick="updateLanguages()"> 
+        - Tr <br><font color=red size='2'>Suat Yıldırım</font></label>
     <span class="divider"></span>
-    <label><input type="checkbox" id="english" onclick="updateLanguages()"> English</label>
+    <label>
+        <input type="checkbox" id="swedish" onclick="updateLanguages()"> 
+        - Sv <br><font color=red size='2'>Knut Bernström</font></label>
+    <span class="divider"></span>
+    <label>
+        <input type="checkbox" id="english" onclick="updateLanguages()"> 
+        - En <br><font color=red size='2'>Abdullah Yusuf Ali</font></label>
   
 <span class="divider"></span>
-  <label class="size-label highlighted-label" for="sizeRange">Arapça Yazı Boyutu:
-    <input type="range" id="sizeRange" min="32" max="50" step="4" value="32" oninput="changeFontSize()">
-    <span id="sizeValue">32px</span>
-  </label>
-<label class="highlighted-label" for="searchInput">Ayetlerde Ara:
+
+   <!-- YENİ: Font Seçici -->
+    <label class="size-label highlighted-label">
+    Arabic: 
+    <select id="arabicFontSelect" onchange="changeArabicFont()">
+        <option value="Traditional Arabic" selected>Traditional Arabic</option>
+        <option value="KFGQPC Uthmanic Script HAFS" disabled>Mushaf (KFGQPC)</option>
+        <option value="Scheherazade New" disabled>Scheherazade New</option>
+        <option value="Lateef" disabled>Lateef</option>
+        <option value="Mirza" disabled>Mirza</option>
+        <option value="Katibeh" disabled>Katibeh</option>
+        
+    </select>
+</label>
+  <!-- Font Boyutu Seçici (Combobox) -->
+<label class="size-label highlighted-label">
+    Size: 
+    <select id="fontSizeSelect" onchange="changeFontSizeFromSelect()">
+        <option value="24">24px</option>
+        <option value="32">32px</option>
+        <option value="40" selected>40px</option>
+        <option value="48">48px</option>
+        <option value="56">56px</option>
+        <option value="64">64px</option>
+    </select>
+</label><br><label>
+ Ayetlerde Ara:
 <input type="text" id="searchInput" placeholder="Kelime veya ifade girin">
 <button type="button" onclick="searchVerses()">Ara</button></label>
   </div>
@@ -218,7 +261,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <button id="closeButton" onclick="closeSearchResults()" style="position: absolute; top: 5px; right: 5px; background: transparent; color: black; border: none; font-size: 20px; line-height: 20px; text-align: center; cursor: pointer;">&times;</button>
     <div id="searchResults" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
 </div>
-</div></div>
+</div>
 <!-- Ayar Paneli -->
 
 
@@ -229,7 +272,7 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
     <div class="action-bar">
        <a href="info.html" title="Bilgi" target="_blank" class="action-button">&#8505;</a>
   <a onclick="toggleSettings()" title="Ayarlar" class="action-button">&#9881;</a> 
-      <button onclick="window.location.href='login.php'" class="action-button logout-button" title="Giriş" >Login</button>
+      <button onclick="window.location.href='login.php'" class="action-button logout-button" title="Giriş" ><span class="material-icons">login</span></button>
   
 </div>
    
@@ -250,23 +293,45 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
         </label>
     <span class="divider"></span>
     <label>
-        <input type="checkbox" id="turkish" onclick="updateLanguages()">
-        <br>Türkçe <br><font color=red size='2'>Suat Yıldırım</font></label>
+        <input type="checkbox" id="turkish" onclick="updateLanguages()"> 
+        - Tr </label>
     <span class="divider"></span>
     <label>
         <input type="checkbox" id="swedish" onclick="updateLanguages()"> 
-        <br>Svenska <br><font color=red size='2'>Knut Bernström</font></label>
+        - Sv </label>
     <span class="divider"></span>
     <label>
         <input type="checkbox" id="english" onclick="updateLanguages()"> 
-        <br>English <br><font color=red size='2'>Abdullah Yusuf Ali</font></label>
+        - En </label>
   
 <span class="divider"></span>
-  <label class="size-label highlighted-label" for="sizeRange">Arabic font size:
-    <input type="range" id="sizeRange" min="32" max="50" step="4" value="32" oninput="changeFontSize()">
-    <span id="sizeValue">32px</span>
-  </label>
-<label class="highlighted-label" for="searchInput">Ayetlerde Ara:
+
+    <!-- YENİ: Font Seçici -->
+    <label class="size-label highlighted-label">
+    Arabic: 
+    <select id="arabicFontSelect" onchange="changeArabicFont()">
+        <option value="Traditional Arabic" selected>Traditional Arabic</option>
+        <option value="KFGQPC Uthmanic Script HAFS" disabled>Mushaf (KFGQPC)</option>
+        <option value="Scheherazade New" disabled>Scheherazade New</option>
+        <option value="Lateef" disabled>Lateef</option>
+        <option value="Mirza" disabled>Mirza</option>
+        <option value="Katibeh" disabled>Katibeh</option>
+        
+    </select>
+</label>
+  <!-- Font Boyutu Seçici (Combobox) -->
+<label class="size-label highlighted-label">
+    Size: 
+    <select id="fontSizeSelect" onchange="changeFontSizeFromSelect()">
+        <option value="24">24px</option>
+        <option value="32">32px</option>
+        <option value="40" selected>40px</option>
+        <option value="48">48px</option>
+        <option value="56">56px</option>
+        <option value="64">64px</option>
+    </select>
+</label><br><label>
+ Ayetlerde Ara:
 <input type="text" id="searchInput" placeholder="Kelime veya ifade girin">
 <button type="button" onclick="searchVerses()">Ara</button></label>
   </div>
@@ -287,12 +352,15 @@ if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 <br>
 
 <?php
+
 include'topic.php';
 ?>
 </div>
 <?php
   }
+  echo "<br><br>";
       include'public.php';
+
   ?>
 
 <script>
@@ -331,8 +399,9 @@ $(document).ready(function() {
     });
 
     $("#juzSelect").on("change", function() {
-        goToPage(2,'juzSelect');
-    });
+    var juz = $(this).val();
+    window.location.replace("?juz=" + juz + "&changed=juzSelect");
+});
 
     $("#verseSelect").on("change", function() {
         changeVerse();
@@ -340,7 +409,7 @@ $(document).ready(function() {
 
 $("#boxSelect").select2({
     
-    width: '200px', // Genişliği sabitleyin
+    width: 'resolve', // Genişliği sabitleyin
     allowClear: true, // Temizleme butonunu etkinleştirin
     placeholder: "Seçiniz..." // Placeholder ekleyin
 
@@ -397,16 +466,40 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("swedish").checked = swedishChecked;
     document.getElementById("english").checked = englishChecked;
 
-     
+     // Font seçimini geri yükle
+    //const savedFont = sessionStorage.getItem("arabicFont") || "KFGQPC Uthmanic Script HAFS";
+    const savedFont = sessionStorage.getItem("arabicFont") || "Traditional Arabic";
+    const fontSelect = document.getElementById("arabicFontSelect");
+    if (fontSelect) {
+        fontSelect.value = savedFont;
+
+        // Amiri için Google Fonts'u ÖNCE yükle
+        if (savedFont === "Amiri" && !document.getElementById("amiriFont")) {
+            const link = document.createElement("link");
+            link.id = "amiriFont";
+            link.href = "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap";
+            link.rel = "stylesheet";
+            document.head.appendChild(link);
+        }
+
+
+        applyArabicFont(savedFont);
+    }
 
 
 
-    updateLanguages();
+   
 
     // Yazı boyutunu geri yükle
-    const fontSize = sessionStorage.getItem("fontSize") || "32";
-    document.getElementById("sizeRange").value = fontSize;
-    changeFontSize();
+    const fontSize = sessionStorage.getItem("fontSize") || "40";
+    const fontSizeSelect = document.getElementById("fontSizeSelect");
+    if (fontSizeSelect) {
+        fontSizeSelect.value = fontSize;
+        applyFontSize(fontSize);
+    }
+
+
+     updateLanguages();
 
         const resultsHTML = sessionStorage.getItem("searchResults");
     const searchTerm = sessionStorage.getItem("searchTerm");
@@ -436,6 +529,96 @@ resultsDiv.innerHTML = resultsHTML;
 
 });
 
+
+
+// Font değiştirme fonksiyonu
+function changeArabicFont() {
+    const fontSelect = document.getElementById("arabicFontSelect");
+    const selectedFont = fontSelect.value;
+    
+    // Amiri için Google Fonts yükle
+    if (selectedFont === "Amiri" && !document.getElementById("amiriFont")) {
+        const link = document.createElement("link");
+        link.id = "amiriFont";
+        link.href = "https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap";
+        link.rel = "stylesheet";
+        document.head.appendChild(link);
+        
+        // Font yüklendikten sonra uygula
+        setTimeout(() => applyArabicFont(selectedFont), 500);
+    } else {
+        applyArabicFont(selectedFont);
+    }
+    
+    // Kaydet
+    sessionStorage.setItem("arabicFont", selectedFont);
+}
+
+// Tüm Arabik elementlere font uygula
+function applyArabicFont(font) {
+    console.log("✅ Font uygulanıyor:", font);
+    
+    const arabicElements = document.querySelectorAll(".arabic, .arabic2");
+    
+    arabicElements.forEach(element => {
+        // Her font için uygun fallback
+        switch(font) {
+            case "KFGQPC Uthmanic Script HAFS":
+                element.style.fontFamily = "'KFGQPC Uthmanic Script HAFS', 'Scheherazade New', serif";
+                break;
+            case "Scheherazade New":
+                element.style.fontFamily = "'Scheherazade New', 'Traditional Arabic', serif";
+                break;
+            case "Lateef":
+                element.style.fontFamily = "'Lateef', 'Traditional Arabic', serif";
+                break;
+            case "Mirza":
+                element.style.fontFamily = "'Mirza', 'Traditional Arabic', serif";
+                break;
+            case "Katibeh":
+                element.style.fontFamily = "'Katibeh', 'Traditional Arabic', serif";
+                break;
+            case "Traditional Arabic":
+                element.style.fontFamily = "'Traditional Arabic', serif";
+                break;
+            default:
+                element.style.fontFamily = `'${font}', 'Traditional Arabic', serif`;
+        }
+    });
+    
+    console.log(`✅ ${arabicElements.length} elemente font uygulandı`);
+}
+
+// Font boyutu değiştirme (Combobox'tan)
+function changeFontSizeFromSelect() {
+    const fontSizeSelect = document.getElementById("fontSizeSelect");
+    const size = fontSizeSelect.value;
+    
+    applyFontSize(size);
+    
+    // Kaydet
+    sessionStorage.setItem("fontSize", size);
+    
+    // Server'a gönder (mevcut fonksiyonunuz)
+    fetch("updatefontsize.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fontSize: size })
+    });
+}
+
+// Font boyutunu uygula
+function applyFontSize(size) {
+    const arabicTexts = document.getElementsByClassName("arabic");
+    const arabicTexts2 = document.getElementsByClassName("arabic2");
+
+    for (let i = 0; i < arabicTexts.length; i++) {
+        arabicTexts[i].style.fontSize = size + "px";
+    }
+    for (let i = 0; i < arabicTexts2.length; i++) {
+        arabicTexts2[i].style.fontSize = size + "px";
+    }
+}
 
 function changeVerse() {
     var verse = document.getElementById("verseSelect").value;
@@ -521,19 +704,26 @@ function updateLanguages() {
         
     }
 
-    function s_turkish(x)
-    {
-        var s_turkish = document.getElementsByClassName("s_turkish");
-        if (x==false) {
-            for (var i = 0; i < s_turkish.length; i++) {
-                s_turkish[i].style.display = "none";
-            }
-        }else{
-            for (var i = 0; i < s_turkish.length; i++) {
-                s_turkish[i].style.display = "inline";
-            }
-        }
+function s_turkish(x) {
+    var s_turkish = document.getElementsByClassName("s_turkish");
+    for (var i = 0; i < s_turkish.length; i++) {
+        s_turkish[i].style.display = x == false ? "none" : "block"; // inline → block
     }
+}
+
+function s_swedish(x) {
+    var s_swedish = document.getElementsByClassName("s_swedish");
+    for (var i = 0; i < s_swedish.length; i++) {
+        s_swedish[i].style.display = x == false ? "none" : "block"; // inline → block
+    }
+}
+
+function s_english(x) {
+    var s_english = document.getElementsByClassName("s_english");
+    for (var i = 0; i < s_english.length; i++) {
+        s_english[i].style.display = x == false ? "none" : "block"; // inline → block
+    }
+}
 
     function swedish(x)
     {
@@ -549,19 +739,7 @@ function updateLanguages() {
         }
     }
 
-    function s_swedish(x)
-    {
-        var s_swedish = document.getElementsByClassName("s_swedish");
-        if (x==false) {
-            for (var i = 0; i < s_swedish.length; i++) {
-                s_swedish[i].style.display = "none";
-            }
-        }else{
-            for (var i = 0; i < s_swedish.length; i++) {
-                s_swedish [i].style.display = "inline";
-            }
-        }
-    }
+
     function sas(x)
     {
         var sas = document.getElementsByClassName("sas");
@@ -592,19 +770,7 @@ function updateLanguages() {
         }
     }
 
-    function s_english(x)
-    {
-        var s_english = document.getElementsByClassName("s_english");
-        if (x==false) {
-            for (var i = 0; i < s_english.length; i++) {
-                s_english[i].style.display = "none";
-            }
-        }else{
-            for (var i = 0; i < s_english.length; i++) {
-                s_english[i].style.display = "inline";
-            }
-        }
-    }
+
     function eas(x)
     {
         var eas = document.getElementsByClassName("eas");
@@ -744,6 +910,18 @@ function updateLanguages() {
         }
     }
 
+
+    // En sonda font ve boyut seçimlerini kaydet
+    const arabicFontSelect = document.getElementById("arabicFontSelect");
+    const fontSizeSelect = document.getElementById("fontSizeSelect");
+    
+    if (arabicFontSelect) {
+        sessionStorage.setItem("arabicFont", arabicFontSelect.value);
+    }
+    if (fontSizeSelect) {
+        sessionStorage.setItem("fontSize", fontSizeSelect.value);
+    }
+
 const styleValue = document.getElementById("style").value;
 var turkishChecked = document.getElementById("turkish").checked;  //false, true
 const swedishChecked = document.getElementById("swedish").checked;
@@ -812,6 +990,10 @@ switch (styleValue) {
 
     default:    //Arabic
         break;
+
+
+
+        
 }
 
 
@@ -826,23 +1008,32 @@ switch (styleValue) {
 
     function toggleSettings() {
         const bar = document.getElementById("settingsBar");
-        bar.style.display = bar.style.display === "block" ? "none" : "block";
+        if (bar.style.display === "block") {
+            bar.style.display = "none";
+            saveAndRefresh();
+        } else {
+            bar.style.display = "block";
+        }
     }
 
+    function saveAndRefresh() {
+        // Değişiklikleri kaydet
+        updateLanguages();
+        // Sayfayı yenile
+        location.reload();
+    }
 
-    let hideTimeout;
+    document.getElementById("settingsBar").addEventListener("mouseenter", function() {
+        if (hideTimeout) {
+            clearTimeout(hideTimeout);
+        }
+    });
 
-        document.getElementById("settingsBar").addEventListener("mouseleave", function () {
-            // 1 saniye sonra gizle
-            hideTimeout = setTimeout(() => {
-                this.style.display = "none";
-                location.reload(); // Sayfayı yenile
-            }, 2000);// Süre 2000 ms (2 saniye) olarak ayarlandı
-        });
-
-        // Eğer kullanıcı geri gelirse iptal edelim:
-        document.getElementById("settingsBar").addEventListener("mouseenter", function () {
-        clearTimeout(hideTimeout);
+    document.getElementById("settingsBar").addEventListener("mouseleave", function() {
+        hideTimeout = setTimeout(() => {
+            this.style.display = "none";
+            saveAndRefresh();
+        }, 800);
     });
 
 //
@@ -898,7 +1089,7 @@ function searchVerses() {
 }
 
 
-
+/*
 function changeFontSize() {
     const size = document.getElementById("sizeRange").value;
 
@@ -914,13 +1105,13 @@ function changeFontSize() {
     }
     document.getElementById("sizeValue").innerText = size + "px";
     
-    const fontSize = sessionStorage.getItem("fontSize") || "32";
+    const fontSize = sessionStorage.getItem("fontSize") || "40";
     fetch("updatefontsize.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ fontSize: fontSize })
     });
-}
+}*/
 
 
 function closeSearchResults() {
@@ -947,25 +1138,260 @@ function submitSurahVerse(surah, verse) {
 document.getElementById("logoutForm").addEventListener("submit", function(e) {
     // topicSelect değerini doğrudan select elementinden al
     const topicSelectValue = document.getElementById("topicSelect").value;
-    document.getElementById("topicSelectInput").value = topicSelectValue  || "0";
+    document.getElementById("topicSelectInput").value = topicSelectValue || "0";
 
     // Diğer değerleri sessionStorage'dan al
     document.getElementById("turkishCheckedInput").value = sessionStorage.getItem("turkishChecked") === "true" ? "1" : "0";
     document.getElementById("swedishCheckedInput").value = sessionStorage.getItem("swedishChecked") === "true" ? "1" : "0";
     document.getElementById("englishCheckedInput").value = sessionStorage.getItem("englishChecked") === "true" ? "1" : "0";
-    document.getElementById("fontSizeInput").value = sessionStorage.getItem("fontSize") || "32";
+    document.getElementById("fontSizeInput").value = sessionStorage.getItem("fontSize") || "40";
+    document.getElementById("arabicFontInput").value = sessionStorage.getItem("arabicFont") || "KFGQPC Uthmanic Script HAFS";
     document.getElementById("searchTermInput").value = sessionStorage.getItem("searchTerm") || "";
     document.getElementById("searchResultsInput").value = sessionStorage.getItem("searchResults") || "";
+    document.getElementById("styleValue").value = sessionStorage.getItem("styleValue") || "";
 
-    // Form gönderilmeden önce topicSelect değerini sessionStorage'a da kaydedelim
+    // Form gönderilmeden önce değerleri sessionStorage'a da kaydedelim
     sessionStorage.setItem("topicSelect", topicSelectValue);
-
-
-    
 });
 
+// Scroll ile navbar gizle/göster
+(function() {
+    let lastScrollY = window.scrollY;
+    const navbar = document.querySelector('.navbar');
+
+    window.addEventListener('scroll', function() {
+        const currentScrollY = window.scrollY;
+
+        if (currentScrollY > lastScrollY && currentScrollY > 60) {
+            // Aşağı scroll → gizle
+            navbar.style.top = '-200px'; // navbar yüksekliğinden fazla
+        } else {
+            // Yukarı scroll → göster
+            navbar.style.top = '0';
+        }
+
+        lastScrollY = currentScrollY;
+    });
+})();
+
+
+
+document.querySelectorAll('.normal, .secde').forEach(function(el) {
+    el.addEventListener('mouseenter', function(e) {
+        const div = this.querySelector('div');
+        if (!div) return;
+        
+        const screenWidth = window.innerWidth;
+        const mouseX = e.clientX;
+        
+        // Ekranı 3 bölgeye böl
+        if (mouseX < screenWidth / 3) {
+            // Sol bölge - soldan hizala
+            div.style.left = '0';
+            div.style.right = 'auto';
+            div.style.textAlign = 'left';
+        } else if (mouseX > (screenWidth / 3) * 2) {
+            // Sağ bölge - sağdan hizala
+            div.style.left = 'auto';
+            div.style.right = '0';
+            div.style.textAlign = 'right';
+        } else {
+            // Orta bölge - ortadan hizala
+            div.style.left = '0';
+            div.style.right = '0';
+            div.style.textAlign = 'center';
+        }
+    });
+});
 
 </script>
-<p id='mesaj'></p>
+
+<p id='mesaj'><?php 
+
+/*
+echo $page_number; ?>/
+<?php echo $page_number; ?>/
+<?php echo $selected_surah; ?>/
+<?php echo $selected_juz; ?>/
+<?php echo $selected_verse; ?>/
+<?php echo $changed; ?>/id:
+<?php echo $id; ?>/
+<?php echo $sveri.$psveri; */
+
+
+// String'in başındaki ve sonundaki virgülleri direkt temizle
+$dipnot = trim($dipnot, ',');
+
+// Virgüllere göre parçalayıp diziye çeviriyoruz
+$dizi = explode(',', $dipnot);
+
+// Boşlukları temizleyelim
+$dizi = array_map('trim', $dizi);
+
+// Boş elemanları filtrele
+$dizi = array_filter($dizi);
+
+// Tekrarları silip sırayı koruyoruz
+$temiz_dizi = array_unique($dizi);
+
+// Tekrar virgüllü metin haline getir
+$sonuc_metin = implode(',', $temiz_dizi);
+
+echo $id.':<br> '.$altbilgi.'<br>ayetno: '.$ayno;
+
+
+//-------------------------------------------------
+/**
+ * Tek bir işaret numarasının Arapça karşılığını döndürür
+ */
+function getArabicSign($signNumber) {
+    switch($signNumber) {
+        case '1':
+            $char1 = mb_chr(0x0615, 'UTF-8');  //
+            $char2 = mb_chr(0x25Cc, 'UTF-8');  // ○             
+            $combined = $char1 . $char2; // Small high seen
+            return $combined;
+        case '2':
+            $combined = '<table border="1" style="display: inline-block; border-width: 0px; vertical-align: middle; margin: 0 5px;">
+	<tr>
+		<td style="border-style: none; border-width: medium; text-align: center; vertical-align: middle; padding: 2px 5px;">
+			<div style="line-height: 0.6;">
+				<b><font size="4">&#1593;</font></b>
+				<br>
+				<font size="7">&#9676;</font>
+			</div>
+		</td>
+	</tr>
+</table>';
+            return $combined; // Rounded zero
+        case '3':
+            return mb_chr(0x0635, 'UTF-8'); // Sad with alef maksura
+        case '4':
+            return mb_chr(0x0632, 'UTF-8'); // Meem initial
+        case '5':
+            $char1 = mb_chr(0x0653, 'UTF-8');  //
+            $char2 = mb_chr(0x25Cc, 'UTF-8');  // ○             
+            $combined = $char2 . $char1;
+            return $combined; // Qaf with alef
+        case '6':
+            return mb_chr(0x06EC, 'UTF-8'); // HS with filled centre
+        case '7':
+            return mb_chr(0x06EB, 'UTF-8'); // Empty centre high stop
+        case '8':
+            return mb_chr(0x06D4, 'UTF-8'); // Full stop
+        case '9':
+            return mb_chr(0x06E0, 'UTF-8'); // SH upright
+        case '10':
+            return mb_chr(0x06E8, 'UTF-8'); // SH noon
+        case '11':
+            $char1 = '&#1753;';  //
+            $char2 = mb_chr(0x25Cc, 'UTF-8');  // ○             
+            $combined = $char1 . $char2;
+            return $combined; // Small high yeh
+        case '12':
+            return mb_chr(0x0633, 'UTF-8'); // SL seen
+        case '13':
+            return mb_chr(0x06DA, 'UTF-8'); // Dotless cim
+        case '14':
+            return mb_chr(0x065A, 'UTF-8'); // Dotted cim
+        case '15':
+            return mb_chr(0x06E2, 'UTF-8'); // SH meem isolated
+        default:
+            return '?';
+    }
+}
+
+/***
+ * $cee='<div style="line-height: 1.4;"><b><font size="4">&#1593;</font></b>
+		<br>
+		<font size="7">&#9676;</font></div>';
+ */
+
+/**
+ * Tek bir işaret numarasının açıklamasını döndürür
+ 
+function getSignExplanation($signNumber) {
+    switch($signNumber) {
+        case '1':
+            return '+ Durulması evlâdır, geçilmesi caizdir.';
+        case '2':
+            return 'Durulması ve namazda ise rükû yapılabilir.';
+        case '3':
+            return 'Geçilmesi evlâdır, durulması caizdir.';
+        case '4':
+            return 'Geçilmesi evlâdır, durulması caizdir.';
+        case '5':
+            return '+ Dört elif miktari uzatilir.';
+        case '6':
+            return 'Uzatmadan kısa oku demektir.';
+        case '7':
+            return 'Kısaltmadan uzun oku demektir.';
+        case '8':
+            return "Nefes almadan dur ve oku demektir. Kuran'da 4 yerde vardır.";
+        case '9':
+            return 'Durulması evlâdır, geçilmesi caizdir.';
+        case '10':
+            return 'Sonu tenvinli kelimelerden bir sonraki kelimeye geçişi sağlar.';
+        case '11':
+            return 'Uzatma (MED) Dik cizgi: harfi bir elif miktarı uzatır.';
+        case '12':
+            return 'Sad harfi seen gibi ince okunur.';
+        case '13':
+            return 'Durulması evlâdır, geçilmesi caizdir.';
+        case '14':
+            return '+Birbirine yakın iki yerde bulunur. Birinde durulunca ötekinde geçilir.';
+        case '15':
+            return 'Durulması gerekir, geçilmesi uygun değildir.';
+        case '16':
+            return 'Ses normal "nâ" gibi çıkar ama dudaklar sessizce bir "u" hareketi yapar.';
+        default:
+            return 'Açıklama bulunamadı.';
+    }
+}
+*/
+/**
+ * Virgülle ayrılmış işaret numaralarını kompakt tablo olarak gösterir
+ */
+function dipnotAsTable($dipnot) {
+    if (empty($dipnot)) {
+        return "<p>Bu ayette durma işareti bulunmamaktadır.</p>";
+    }
+    
+    // Virgülle ayrılmış numaraları diziye çevir
+    $dizi = array_map('trim', explode(',', $dipnot));
+    
+    // Benzersiz sayıları al (ilk gelme sırasını korur)
+    $benzersiz_sayilar = array_unique($dizi);
+    
+
+    $output = "<div style='line-height: 1.8; font-size: 0.95em;'>";
+
+$items = [];
+foreach ($benzersiz_sayilar as $numara) {
+    $arapca_isaret = getArabicSign($numara);
+    $aciklama = getSignExplanation($numara);
+
+    $items[] = htmlspecialchars($numara) . " " .
+               "<font face='Traditional Arabic' size='7' color='red'>" .
+               $arapca_isaret .
+               "</font> : " .
+               htmlspecialchars($aciklama);
+}
+
+$output .= implode(" &nbsp;|&nbsp; ", $items); // virgül yerine | ayırıcı da olabilir
+
+$output .= "</div>";
+
+return $output;
+}
+
+
+
+//echo dipnotAsTable($sonuc_metin);
+//echo "<div style='background:red;color:white;padding:10px;font-size:20px'>SESSION fontSize: " . ($_SESSION['fontSize'] ?? 'YOK') . "</div>";
+
+
+?>
+
 </body>
 </html>

@@ -8,7 +8,7 @@ function removeSwedishParentheses($text) {
     $text=str_replace("Ã…","Å", $text);
     $text=str_replace("Ã¶","ö", $text);
     $text=str_replace("Ã–","Ö", $text);
-
+    
     
     return $text;       
 }

@@ -15,6 +15,7 @@ $count = $stmt->fetchColumn();
 </head>
 
 <body>
+	
 <?php
 switch ($count) {
 	case 0:

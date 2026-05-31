@@ -1,35 +1,9 @@
 <?php
+//echo $_SERVER['DOCUMENT_ROOT'];
 include("conn.php");
 
 $category_id='';
-/*
-//yon 1(ref formu) eller 2(form)
-if (isset($_POST['ref'])) {
-	$category_id=$_POST['ref'];
-	if ($category_id=='2Z90LATHGO') {//arka giriş
-		$yon=2;
-	}else{
-		//database kontrol edelim. bir ref yoksa break yapalım
-		$kullanici = $db->query("SELECT id,erisim FROM uye where astrefnum='$category_id'")->fetch();
-		//echo $kullanici["id"];exit;
-		//echo $_POST['ref'].'ll';
 
-		if ($kullanici["id"]==0)
-		{echo "Bu referans numarasına erisime kapanmıştır. Açılması için referansınızla görüşün!";
-			echo '<font color="#FF0000"><br>';$yon=1;
-		}else{
-			if ($kullanici["erisim"]>0)
-			{
-				$yon=2;
-			}else{
-				echo $category_id;
-				echo "<br>Bu referans numarasının kontejanı kapanmıştır. Açılması için, öğretmeniniz ile görüşebilirsiniz.";echo '<font color="#FF0000"><br>';$yon=1;
-			}
-		}
-	}
-
-}else{$yon=1;}
-*/
 
 
 if (isset($_POST['B2'])) { // Kayıt butonuna basıldı

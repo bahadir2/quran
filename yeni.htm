@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuran İşaret Pozisyon Editörü</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 { font-size: 2em; margin-bottom: 10px; }
+
+        .header-links {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .header-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.88em;
+            font-weight: 600;
+            border: 1.5px solid rgba(255,255,255,0.35);
+            transition: all .2s;
+            backdrop-filter: blur(4px);
+        }
+
+        .header-links a:hover {
+            background: rgba(255,255,255,0.28);
+            border-color: rgba(255,255,255,0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 420px 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .editor-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .preview-panel { display: flex; flex-direction: column; gap: 20px; }
+
+        .input-section, .preview-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .input-section h3, .preview-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .text-input {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 2.5em;
+            direction: rtl;
+            text-align: right;
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', serif;
+            line-height: 2;
+            resize: vertical;
+        }
+
+        .text-input:focus { outline: none; border-color: #667eea; }
+
+        .preview-section { min-height: 300px; }
+        .preview-section h3 { direction: ltr; text-align: left; }
+
+        .preview-text {
+            direction: rtl;
+            text-align: right;
+            line-height: 1.8;
+            letter-spacing: 0.1px;
+            font-family: 'KFGQPC Uthmanic Script HAFS', 'Scheherazade New', 'Lateef', 'Traditional Arabic', serif;
+            color: #006600;
+        }
+
+        .dynamic-font {
+            font-size: 1em;
+            position: absolute;
+            padding: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            direction: ltr;
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+            padding: 18px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .control-group h3 {
+            color: #667eea;
+            margin-bottom: 14px;
+            font-size: 1.05em;
+        }
+
+        .control-row {
+            display: grid;
+            grid-template-columns: 110px 1fr 70px;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        label { font-weight: 600; color: #495057; font-size: 0.9em; }
+
+        input[type="range"] {
+            width: 100%; height: 6px;
+            border-radius: 3px; background: #e9ecef;
+            outline: none; -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px; height: 18px;
+            border-radius: 50%; background: #667eea; cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 18px; height: 18px;
+            border-radius: 50%; background: #667eea;
+            cursor: pointer; border: none;
+        }
+
+        .value-display {
+            font-weight: bold; color: #667eea;
+            text-align: center; font-size: 0.9em;
+        }
+
+        input[type="color"] {
+            width: 100%; height: 35px;
+            border: none; border-radius: 8px; cursor: pointer;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 7px 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.88em;
+            transition: border-color .2s;
+        }
+        input[type="text"]:focus { outline: none; border-color: #667eea; }
+
+        /* ── Source chars (same style as target chars) ── */
+        .source-chars-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        .source-chars-toolbar span {
+            font-size: 0.85em;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .target-chars-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .target-chars-toolbar span {
+            font-size: 0.85em;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .chars-counter {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .counter-btn {
+            width: 30px; height: 30px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 1.15em;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .15s;
+            line-height: 1;
+        }
+        .counter-btn:hover:not(:disabled) { background: #667eea; color: white; }
+        .counter-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .counter-num {
+            font-weight: 700;
+            color: #764ba2;
+            font-size: 1.05em;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        #sourceCharsList { display: flex; flex-direction: column; gap: 7px; }
+        #targetCharsList { display: flex; flex-direction: column; gap: 7px; }
+
+        .target-char-row {
+            display: grid;
+            grid-template-columns: 26px 60px 1fr 30px;
+            gap: 8px;
+            align-items: center;
+            background: #f8f9ff;
+            padding: 8px 10px;
+            border-radius: 9px;
+            border: 1px solid #e4e8ff;
+            animation: fadeIn .2s ease;
+        }
+
+        /* Source rows get a slightly warmer tint to visually distinguish */
+        .source-char-row {
+            display: grid;
+            grid-template-columns: 26px 60px 1fr 30px;
+            gap: 8px;
+            align-items: center;
+            background: #fff8f0;
+            padding: 8px 10px;
+            border-radius: 9px;
+            border: 1px solid #ffe0b2;
+            animation: fadeIn .2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity:0; transform: translateY(-5px); }
+            to   { opacity:1; transform: translateY(0); }
+        }
+
+        .char-index {
+            width: 24px; height: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.75em;
+            flex-shrink: 0;
+        }
+
+        /* Source index badge: orange gradient */
+        .src-char-index {
+            width: 24px; height: 24px;
+            background: linear-gradient(135deg, #ff9800, #f44336);
+            color: white;
+            border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.75em;
+            flex-shrink: 0;
+        }
+
+        .char-preview {
+            height: 30px;
+            background: #eef0ff;
+            border: 1px solid #c9cef0;
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', serif;
+            font-size: 1.2em;
+            color: #3a3a8c;
+            overflow: hidden;
+            padding: 0 4px;
+        }
+
+        .src-char-preview {
+            height: 30px;
+            background: #fff3e0;
+            border: 1px solid #ffcc80;
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', serif;
+            font-size: 1.2em;
+            color: #bf360c;
+            overflow: hidden;
+            padding: 0 4px;
+        }
+
+        .char-hex-input {
+            font-family: 'Courier New', monospace !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-remove-char {
+            width: 28px; height: 28px;
+            background: #ffe0e6;
+            border: none;
+            border-radius: 7px;
+            color: #c0392b;
+            font-size: 0.95em;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all .15s;
+            flex-shrink: 0;
+        }
+        .btn-remove-char:hover:not(:disabled) { background: #c0392b; color: white; }
+        .btn-remove-char:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        .combined-preview-box {
+            margin-top: 12px;
+            background: #f0f2ff;
+            border: 1px dashed #a0a8e8;
+            border-radius: 9px;
+            padding: 10px 14px;
+        }
+        .combined-preview-box.src-box {
+            background: #fff8f0;
+            border-color: #ffcc80;
+        }
+        .combined-preview-box .label {
+            font-size: 0.75em;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .combined-preview-box.src-box .label { color: #e65100; }
+        .combined-preview-box .chars-display {
+            font-family: 'Traditional Arabic', 'Arabic Typesetting', serif;
+            font-size: 1.6em;
+            color: #3a3a8c;
+            direction: rtl;
+            margin-bottom: 4px;
+        }
+        .combined-preview-box.src-box .chars-display { color: #bf360c; }
+        .combined-preview-box .hex-display {
+            font-family: 'Courier New', monospace;
+            font-size: 0.76em;
+            color: #764ba2;
+            word-break: break-all;
+            line-height: 1.5;
+        }
+        .combined-preview-box.src-box .hex-display { color: #e65100; }
+
+        .buttons {
+            display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;
+        }
+
+        button.btn-primary {
+            flex: 2; padding: 12px 16px;
+            border: none; border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white; font-size: 0.92em; font-weight: 700;
+            cursor: pointer; transition: all .25s;
+        }
+        button.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,.4); }
+
+        button.btn-success {
+            flex: 2; padding: 12px 16px;
+            border: none; border-radius: 10px;
+            background: #28a745; color: white;
+            font-size: 0.92em; font-weight: 700;
+            cursor: pointer; transition: all .25s;
+        }
+        button.btn-success:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(40,167,69,.4); }
+
+        button.btn-secondary {
+            flex: 1; padding: 12px 16px;
+            border: none; border-radius: 10px;
+            background: #6c757d; color: white;
+            font-size: 0.92em; font-weight: 700;
+            cursor: pointer; transition: all .25s;
+        }
+        button.btn-secondary:hover { background: #545b62; }
+
+        .code-output {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82em;
+            max-height: 450px;
+            overflow: auto;
+            display: none;
+        }
+        .code-output.show { display: block; }
+        .code-output pre { margin: 0; white-space: pre-wrap; word-break: break-all; }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px 14px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 0.88em;
+            color: #0d47a1;
+        }
+
+        .font-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.83em;
+            margin-top: 6px;
+        }
+        .font-table thead th {
+            background: #eef0ff;
+            color: #3949ab;
+            font-weight: 700;
+            padding: 7px 5px;
+            text-align: center;
+            border-bottom: 2px solid #c5cae9;
+            font-size: 0.80em;
+            white-space: nowrap;
+        }
+        .font-table tbody tr { border-bottom: 1px solid #f0f0f8; transition: background .15s; }
+        .font-table tbody tr:hover { background: #f5f6ff; }
+        .font-table tbody tr.active-row { background: #e8eaff !important; }
+        .font-table td { padding: 5px 3px; text-align: center; vertical-align: middle; }
+        .font-table input[type="radio"] { width: 16px; height: 16px; accent-color: #667eea; cursor: pointer; }
+        .font-label { font-weight: 700; color: #444; font-size: 0.92em; }
+        .font-table input[type="number"] {
+            width: 56px; padding: 4px 4px;
+            border: 1.5px solid #d0d4f0; border-radius: 6px;
+            font-size: 0.85em; text-align: center; color: #263238;
+            background: white; transition: border-color .15s;
+            -moz-appearance: textfield;
+        }
+        .font-table input[type="number"]::-webkit-outer-spin-button,
+        .font-table input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .font-table input[type="number"]:focus { outline: none; border-color: #667eea; background: #f0f2ff; }
+        .font-table input[type="number"].empty-cell { background: #fff8e1; border-color: #ffc107; }
+
+        .slider-section {
+            margin-top: 14px; padding-top: 12px;
+            border-top: 2px dashed #e0e4f8;
+        }
+        .slider-section .slider-label {
+            font-size: 0.78em; color: #667eea; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+        }
+        .center-btn-row { display: flex; justify-content: flex-end; margin-top: 10px; gap: 8px; }
+        button.btn-center {
+            padding: 8px 16px; border: none; border-radius: 8px;
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white; font-size: 0.84em; font-weight: 700;
+            cursor: pointer; transition: all .2s;
+        }
+        button.btn-center:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(255,152,0,.4); }
+
+        .adj-box {
+            background: #1e1e2e;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #313244;
+        }
+        .adj-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 14px;
+            background: #2a2a3e;
+            border-bottom: 1px solid #313244;
+        }
+        .adj-header span {
+            font-family: 'Courier New', monospace;
+            font-size: 0.83em;
+            font-weight: 700;
+            color: #cba6f7;
+        }
+        .btn-copy {
+            padding: 4px 10px;
+            background: #45475a;
+            color: #cdd6f4;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.78em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .15s;
+        }
+        .btn-copy:hover  { background: #667eea; color: white; }
+        .btn-copy.copied { background: #28a745; color: white; }
+        .adj-code {
+            padding: 12px 14px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.82em;
+            color: #a6e3a1;
+            white-space: pre;
+            line-height: 1.6;
+            user-select: all;
+            cursor: text;
+        }
+
+        @media (max-width: 1200px) {
+            .main-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🕌 Kuran İşaret Pozisyon Editörü</h1>
+        <p>Ayet metnini girin, işaret karakterlerini ayarlayın ve PHP kodunu alın</p>
+        <div class="header-links">
+            <a href="yeni.php" target="_blank">🔍 Karakter Analiz</a>
+            <a href="quran_filter.php" target="_blank">🔍 Quranda Karakter Ara</a>
+            <a href="yeni2.php" target="_blank">📚 Karakter Seti</a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- ══ EDITOR PANEL ══ -->
+        <div class="editor-panel">
+            <div class="info-box">
+                💡 <strong>Yeni:</strong> Hem <strong>kaynak</strong> hem de <strong>hedef</strong> karakter sayısını <strong>+ / −</strong> butonlarıyla 1–6 arasında ayarlayabilirsiniz.
+            </div>
+
+            <!-- Kaynak karakterler -->
+            <div class="control-group">
+                <h3>📝 Kaynak Karakterler</h3>
+                <div class="source-chars-toolbar">
+                    <span>Kaynak karakter sayısı (1–6):</span>
+                    <div class="chars-counter">
+                        <button class="counter-btn" id="btnRemoveSrcChar" onclick="removeSrcChar()" title="Son kaynağı sil">−</button>
+                        <span class="counter-num" id="srcCharCount">1</span>
+                        <button class="counter-btn" id="btnAddSrcChar" onclick="addSrcChar()" title="Kaynak ekle">+</button>
+                    </div>
+                </div>
+                <div id="sourceCharsList"></div>
+                <div class="combined-preview-box src-box" style="margin-top:12px;">
+                    <div class="label">Birleşik Kaynak Dizisi (Önizleme)</div>
+                    <div class="chars-display" id="combinedSrcCharDisplay">—</div>
+                    <div class="hex-display"  id="combinedSrcHexDisplay">—</div>
+                </div>
+            </div>
+
+            <!-- Hedef karakterler -->
+            <div class="control-group">
+                <h3>🎯 Hedef Karakterler</h3>
+                <div class="target-chars-toolbar">
+                    <span>Hedef karakter sayısı (1–6):</span>
+                    <div class="chars-counter">
+                        <button class="counter-btn" id="btnRemoveChar" onclick="removeTargetChar()" title="Son karakteri sil">−</button>
+                        <span class="counter-num" id="charCount">1</span>
+                        <button class="counter-btn" id="btnAddChar" onclick="addTargetChar()" title="Karakter ekle">+</button>
+                    </div>
+                </div>
+                <div id="targetCharsList"></div>
+                <div class="combined-preview-box">
+                    <div class="label">Birleşik Hedef Dizisi (Önizleme)</div>
+                    <div class="chars-display" id="combinedCharDisplay">—</div>
+                    <div class="hex-display" id="combinedHexDisplay">—</div>
+                </div>
+            </div>
+
+            <!-- Temel Ayarlar + Pozisyon -->
+            <div class="control-group">
+                <h3>📐 Temel Ayarlar &amp; Pozisyon</h3>
+                <table class="font-table" id="fontTable">
+                    <thead>
+                        <tr>
+                            <th>Seç</th>
+                            <th>Font</th>
+                            <th>Boyut</th>
+                            <th>Yukarı/Aşağı</th>
+                            <th>Sola/Sağa</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fontTableBody"></tbody>
+                </table>
+                <div class="center-btn-row">
+                    <button class="btn-center" id="btnCenter">⬤ Ortala (boş hücreleri doldur)</button>
+                </div>
+                <div class="slider-section">
+                    <div class="slider-label" id="sliderSectionLabel">Seçili font için ayarlar</div>
+                    <div class="control-row">
+                        <label>İşaret Boyutu:</label>
+                        <input type="range" id="markerSize" min="8" max="80" value="38" step="1">
+                        <span class="value-display" id="sizeDisplay">38px</span>
+                    </div>
+                    <div class="control-row">
+                        <label>Yukarı/Aşağı:</label>
+                        <input type="range" id="markerTop" min="-150" max="150" value="0" step="1">
+                        <span class="value-display" id="topDisplay">0px</span>
+                    </div>
+                    <div class="control-row">
+                        <label>Sola/Sağa:</label>
+                        <input type="range" id="markerLeft" min="-150" max="150" value="0" step="1">
+                        <span class="value-display" id="leftDisplay">0px</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Görünüm -->
+            <div class="control-group">
+                <h3>🎨 Görünüm</h3>
+                <div class="control-row">
+                    <label>Renk:</label>
+                    <input type="color" id="markerColor" value="#28a745">
+                    <span class="value-display" id="colorDisplay">#28a745</span>
+                </div>
+                <div class="control-row" style="grid-template-columns: 110px 1fr;">
+                    <label>Açıklama:</label>
+                    <input type="text" id="markerDesc" value="" placeholder="Tooltip açıklaması (opsiyonel)">
+                </div>
+            </div>
+
+            <div class="buttons">
+                <button class="btn-primary" id="btnGenerateCode">📋 PHP Kodu</button>
+                <button class="btn-success" id="btnApply">✨ Uygula</button>
+                <button class="btn-secondary" id="btnReset">🔄 Sıfırla</button>
+            </div>
+
+            <div class="code-output" id="codeOutput">
+                <pre id="generatedCode"></pre>
+            </div>
+
+            <!-- Adjustment arrays -->
+            <div id="adjustmentBoxes" style="display:none; flex-direction:column; gap:10px; margin-top:16px;">
+
+                <!-- Format 1: sayı -->
+                <div class="adj-box">
+                    <div class="adj-header">
+                        <span>PHP Adjustment Arrays (sayı)</span>
+                        <button class="btn-copy" id="btnCopyAll">📋 Kopyala</button>
+                    </div>
+                    <div class="adj-code" id="allAdjCode"></div>
+                </div>
+
+                <!-- Format 2: px'li string -->
+                <div class="adj-box">
+                    <div class="adj-header">
+                        <span>PHP Adjustment Arrays ('px' formatlı)</span>
+                        <button class="btn-copy" id="btnCopyAllPx">📋 Kopyala</button>
+                    </div>
+                    <div class="adj-code" id="allAdjCodePx" style="color:#89dceb;"></div>
+                </div>
+
+                <!-- İç içe span hesaplanmış top -->
+                <div class="adj-box" id="nestedTopBox">
+                    <div class="adj-header">
+                        <span>$topAdjustments (İç İçe)</span>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <input type="text" id="parentTopFormula" placeholder="örn: -(fs-12)"
+                                style="background:#2a2a3e; border:1px solid #6c7086; color:#cdd6f4; border-radius:5px; padding:3px 7px; font-family:monospace; font-size:0.82em; width:120px;">
+                            <button id="btnCalcNested" style="padding:3px 10px; background:#f57c00; border:none; border-radius:5px; color:white; font-size:0.8em; font-weight:700; cursor:pointer;">Hesapla</button>
+                            <button class="btn-copy" id="btnCopyNestedTop">📋 Kopyala</button>
+                        </div>
+                    </div>
+                    <div class="adj-code" id="nestedTopCode" style="color:#f9e2af;">—</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ══ PREVIEW PANEL ══ -->
+        <div class="preview-panel">
+            <div class="input-section">
+                <h3>📖 Ayet Metni (Giriş)</h3>
+                <textarea class="text-input" id="inputText" placeholder="Ayet metnini buraya yapıştırın...">وَاِذَا ق۪يلَ لَهُمُ اتَّبِعُوا مَٓا اَنْزَلَ اللّٰهُ قَالُوا بَلْ نَتَّبِعُ مَٓا اَلْفَيْنَا عَلَيْهِ اٰبَٓاءَنَاۜ اَوَلَوْ كَانَ اٰبَٓاؤُ۬هُمْ لَا يَعْقِلُونَ شَيْـًٔا وَلَا يَهْتَدُونَ</textarea>
+            </div>
+            <div class="preview-section">
+                <h3>👁️ Önizleme (İşlenmiş)</h3>
+                <div class="preview-text" id="previewText"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const MAX_CHARS  = 6;
+    const MIN_CHARS  = 1;
+    const FONT_SIZES = [24, 32, 40, 48, 56, 64];
+    const COOKIE_NAME = 'kuranEditorState';
+
+    let fontData = {};
+    FONT_SIZES.forEach(f => { fontData[f] = { size: null, top: null, left: null }; });
+    let selectedFont = 40;
+    let targetChars  = ['0656'];
+    let sourceChars  = ['06EA'];   // ← NEW: array instead of single string
+
+    const inputText    = document.getElementById('inputText');
+    const markerTop    = document.getElementById('markerTop');
+    const markerLeft   = document.getElementById('markerLeft');
+    const markerSize   = document.getElementById('markerSize');
+    const markerColor  = document.getElementById('markerColor');
+    const markerDesc   = document.getElementById('markerDesc');
+    const previewText  = document.getElementById('previewText');
+    const codeOutput   = document.getElementById('codeOutput');
+    const generatedCode= document.getElementById('generatedCode');
+
+    // ══ COOKIE ══════════════════════════════
+    function saveCookie() {
+        const state = { fontData, selectedFont, targetChars, sourceChars,
+            color: markerColor.value, desc: markerDesc.value,
+            inputText: inputText.value };
+        const exp = new Date(); exp.setFullYear(exp.getFullYear() + 1);
+        document.cookie = COOKIE_NAME + '=' + encodeURIComponent(JSON.stringify(state))
+            + '; expires=' + exp.toUTCString() + '; path=/; SameSite=Lax';
+    }
+    function loadCookie() {
+        const match = document.cookie.split('; ').find(r => r.startsWith(COOKIE_NAME + '='));
+        if (!match) return false;
+        try {
+            const s = JSON.parse(decodeURIComponent(match.split('=').slice(1).join('=')));
+            if (s.fontData)     fontData     = s.fontData;
+            if (s.selectedFont) selectedFont = s.selectedFont;
+            if (s.targetChars)  targetChars  = s.targetChars;
+            // Support old cookie that stored sourceChar as string
+            if (s.sourceChars)       sourceChars = s.sourceChars;
+            else if (s.sourceChar)   sourceChars = [s.sourceChar];
+            if (s.color)        markerColor.value  = s.color;
+            if (s.desc !== undefined) markerDesc.value = s.desc;
+            if (s.inputText !== undefined) inputText.value = s.inputText;
+            return true;
+        } catch { return false; }
+    }
+
+    // ══ HELPERS ═════════════════════════════
+    function hexToChar(hex) {
+        try { const c = parseInt(hex, 16); if (isNaN(c) || c <= 0) return ''; return String.fromCodePoint(c); } catch { return ''; }
+    }
+    function getCombinedString()    { return targetChars.map(h => hexToChar(h)).join(''); }
+    function getCombinedSrcString() { return sourceChars.map(h => hexToChar(h)).join(''); }
+
+    // ══ SOURCE CHARS ════════════════════════
+    function renderSourceCharsList() {
+        const list = document.getElementById('sourceCharsList');
+        list.innerHTML = '';
+        sourceChars.forEach((hex, i) => {
+            const canRemove = sourceChars.length > MIN_CHARS;
+
+            const badge = document.createElement('div');
+            badge.className = 'src-char-index'; badge.textContent = i + 1;
+
+            const preview = document.createElement('div');
+            preview.className = 'src-char-preview'; preview.id = 'srcCharPreview_' + i;
+            preview.textContent = hexToChar(hex) || '?';
+
+            const input = document.createElement('input');
+            input.type = 'text'; input.className = 'char-hex-input'; input.maxLength = 5;
+            input.value = hex; input.placeholder = '06EA';
+            input.addEventListener('input', function() {
+                const idx = parseInt(this.closest('.source-char-row').dataset.index);
+                sourceChars[idx] = this.value.trim().toUpperCase();
+                document.getElementById('srcCharPreview_' + idx).textContent = hexToChar(this.value.trim()) || '?';
+                updateCombinedSrcPreview(); saveCookie(); applyToText();
+            });
+
+            const btn = document.createElement('button');
+            btn.className = 'btn-remove-char'; btn.title = 'Bu kaynağı sil'; btn.textContent = '✕'; btn.disabled = !canRemove;
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.closest('.source-char-row').dataset.index);
+                if (sourceChars.length <= MIN_CHARS) return;
+                sourceChars.splice(idx, 1); renderSourceCharsList(); saveCookie(); applyToText();
+            });
+
+            const row = document.createElement('div');
+            row.className = 'source-char-row'; row.dataset.index = i;
+            row.append(badge, preview, input, btn);
+            list.appendChild(row);
+        });
+        updateSrcCounterButtons(); updateCombinedSrcPreview();
+    }
+
+    function updateSrcCounterButtons() {
+        document.getElementById('btnRemoveSrcChar').disabled = sourceChars.length <= MIN_CHARS;
+        document.getElementById('btnAddSrcChar').disabled    = sourceChars.length >= MAX_CHARS;
+        document.getElementById('srcCharCount').textContent  = sourceChars.length;
+    }
+
+    function updateCombinedSrcPreview() {
+        document.getElementById('combinedSrcCharDisplay').textContent = getCombinedSrcString() || '—';
+        document.getElementById('combinedSrcHexDisplay').textContent  =
+            sourceChars.length ? sourceChars.map(h => `mb_chr(0x${h.toUpperCase()}, 'UTF-8')`).join(" . \n") : '—';
+    }
+
+    function addSrcChar()    { if (sourceChars.length >= MAX_CHARS) return; sourceChars.push('0000'); renderSourceCharsList(); saveCookie(); }
+    function removeSrcChar() { if (sourceChars.length <= MIN_CHARS) return; sourceChars.pop();        renderSourceCharsList(); saveCookie(); applyToText(); }
+
+    // ══ FONT TABLE ══════════════════════════
+    function buildFontTable() {
+        const tbody = document.getElementById('fontTableBody');
+        tbody.innerHTML = '';
+        FONT_SIZES.forEach(fs => {
+            const d = fontData[fs] || { size: null, top: null, left: null };
+            const isSelected = fs === selectedFont;
+            const tr = document.createElement('tr');
+            if (isSelected) tr.classList.add('active-row');
+            tr.dataset.font = fs;
+
+            const tdR = document.createElement('td');
+            const radio = document.createElement('input');
+            radio.type = 'radio'; radio.name = 'fontSizeRadio'; radio.value = fs; radio.checked = isSelected;
+            radio.addEventListener('change', () => selectFont(fs));
+            tdR.appendChild(radio);
+
+            const tdL = document.createElement('td');
+            tdL.className = 'font-label'; tdL.textContent = fs + 'px';
+
+            const tdS = document.createElement('td'); tdS.appendChild(makeNumInput('size', fs, d.size,  8,   80));
+            const tdT = document.createElement('td'); tdT.appendChild(makeNumInput('top',  fs, d.top, -150, 150));
+            const tdLf= document.createElement('td'); tdLf.appendChild(makeNumInput('left', fs, d.left,-150, 150));
+
+            tr.append(tdR, tdL, tdS, tdT, tdLf);
+            tbody.appendChild(tr);
+        });
+        syncSlidersFromSelected();
+        updateSliderLabel();
+    }
+
+    function makeNumInput(field, fs, val, min, max) {
+        const inp = document.createElement('input');
+        inp.type = 'number'; inp.min = min; inp.max = max; inp.placeholder = '—';
+        inp.dataset.font = fs; inp.dataset.field = field;
+        if (val !== null && val !== undefined) { inp.value = val; }
+        else { inp.classList.add('empty-cell'); }
+        inp.addEventListener('input', function() {
+            const v = this.value === '' ? null : parseFloat(this.value);
+            fontData[this.dataset.font][this.dataset.field] = v;
+            this.classList.toggle('empty-cell', v === null);
+            if (parseInt(this.dataset.font) === selectedFont) syncSlidersFromSelected();
+            saveCookie(); applyToText();
+        });
+        return inp;
+    }
+
+    function selectFont(fs) {
+        selectedFont = fs;
+        document.querySelectorAll('#fontTableBody tr').forEach(tr => {
+            tr.classList.toggle('active-row', parseInt(tr.dataset.font) === fs);
+        });
+        syncSlidersFromSelected(); updateSliderLabel(); saveCookie(); applyToText();
+    }
+
+    function syncSlidersFromSelected() {
+        const d = fontData[selectedFont] || {};
+        markerSize.value = (d.size !== null && d.size !== undefined) ? d.size : 38;
+        markerTop.value  = (d.top  !== null && d.top  !== undefined) ? d.top  : 0;
+        markerLeft.value = (d.left !== null && d.left !== undefined) ? d.left : 0;
+        updateDisplayValues();
+    }
+
+    function syncSelectedFromSliders() {
+        if (!fontData[selectedFont]) fontData[selectedFont] = {};
+        fontData[selectedFont].size = parseFloat(markerSize.value);
+        fontData[selectedFont].top  = parseFloat(markerTop.value);
+        fontData[selectedFont].left = parseFloat(markerLeft.value);
+        updateTableRow(selectedFont);
+        saveCookie();
+    }
+
+    function updateTableRow(fs) {
+        const d = fontData[fs] || {};
+        document.querySelectorAll(`#fontTableBody input[type="number"][data-font="${fs}"]`).forEach(inp => {
+            const val = d[inp.dataset.field];
+            inp.value = (val !== null && val !== undefined) ? val : '';
+            inp.classList.toggle('empty-cell', val === null || val === undefined);
+        });
+    }
+
+    function updateDisplayValues() {
+        document.getElementById('sizeDisplay').textContent  = markerSize.value + 'px';
+        document.getElementById('topDisplay').textContent   = markerTop.value  + 'px';
+        document.getElementById('leftDisplay').textContent  = markerLeft.value + 'px';
+        document.getElementById('colorDisplay').textContent = markerColor.value;
+    }
+
+    function updateSliderLabel() {
+        document.getElementById('sliderSectionLabel').textContent =
+            selectedFont + 'px için anlık ayar (tablo otomatik güncellenir)';
+    }
+
+    function centerEmptyCells() {
+        const first = FONT_SIZES[0];
+        const last  = FONT_SIZES[FONT_SIZES.length - 1];
+        const steps = FONT_SIZES.length - 1;
+
+        ['size','top','left'].forEach(field => {
+            const v0 = fontData[first][field];
+            const v1 = fontData[last][field];
+
+            if (v0 !== null && v0 !== undefined && v1 !== null && v1 !== undefined) {
+                const step = (v1 - v0) / steps;
+                FONT_SIZES.forEach((fs, i) => {
+                    if (fontData[fs][field] === null || fontData[fs][field] === undefined) {
+                        fontData[fs][field] = Math.round(v0 + step * i);
+                        updateTableRow(fs);
+                    }
+                });
+            } else {
+                const filled = FONT_SIZES.map(f => fontData[f][field]).filter(v => v !== null && v !== undefined);
+                if (!filled.length) return;
+                const avg = Math.round(filled.reduce((a,b) => a+b, 0) / filled.length);
+                FONT_SIZES.forEach(f => {
+                    if (fontData[f][field] === null || fontData[f][field] === undefined) {
+                        fontData[f][field] = avg; updateTableRow(f);
+                    }
+                });
+            }
+        });
+        syncSlidersFromSelected(); saveCookie(); applyToText();
+    }
+
+    // ══ TARGET CHARS ════════════════════════
+    function renderTargetCharsList() {
+        const list = document.getElementById('targetCharsList');
+        list.innerHTML = '';
+        targetChars.forEach((hex, i) => {
+            const canRemove = targetChars.length > MIN_CHARS;
+            const badge = document.createElement('div');
+            badge.className = 'char-index'; badge.textContent = i + 1;
+            const preview = document.createElement('div');
+            preview.className = 'char-preview'; preview.id = 'charPreview_' + i;
+            preview.textContent = hexToChar(hex) || '?';
+            const input = document.createElement('input');
+            input.type = 'text'; input.className = 'char-hex-input'; input.maxLength = 5;
+            input.value = hex; input.placeholder = '0656'; input.title = 'Unicode hex kodu (örn: 0656)';
+            input.addEventListener('input', function() {
+                const idx = parseInt(this.closest('.target-char-row').dataset.index);
+                targetChars[idx] = this.value.trim().toUpperCase();
+                document.getElementById('charPreview_' + idx).textContent = hexToChar(this.value.trim()) || '?';
+                updateCombinedPreview(); saveCookie(); applyToText();
+            });
+            const btn = document.createElement('button');
+            btn.className = 'btn-remove-char'; btn.title = 'Bu karakteri sil'; btn.textContent = '✕'; btn.disabled = !canRemove;
+            btn.addEventListener('click', function() {
+                const idx = parseInt(this.closest('.target-char-row').dataset.index);
+                if (targetChars.length <= MIN_CHARS) return;
+                targetChars.splice(idx, 1); renderTargetCharsList(); saveCookie();
+            });
+            const row = document.createElement('div');
+            row.className = 'target-char-row'; row.dataset.index = i;
+            row.append(badge, preview, input, btn);
+            list.appendChild(row);
+        });
+        updateCounterButtons(); updateCombinedPreview(); applyToText();
+    }
+
+    function updateCounterButtons() {
+        document.getElementById('btnRemoveChar').disabled = targetChars.length <= MIN_CHARS;
+        document.getElementById('btnAddChar').disabled    = targetChars.length >= MAX_CHARS;
+        document.getElementById('charCount').textContent  = targetChars.length;
+    }
+    function updateCombinedPreview() {
+        document.getElementById('combinedCharDisplay').textContent = getCombinedString() || '—';
+        document.getElementById('combinedHexDisplay').textContent  =
+            targetChars.length ? targetChars.map(h=>`mb_chr(0x${h.toUpperCase()}, 'UTF-8')`).join(" . \n") : '—';
+    }
+    function addTargetChar()    { if (targetChars.length >= MAX_CHARS) return; targetChars.push('0000'); renderTargetCharsList(); saveCookie(); }
+    function removeTargetChar() { if (targetChars.length <= MIN_CHARS) return; targetChars.pop();        renderTargetCharsList(); saveCookie(); }
+
+    // ══ PREVIEW ═════════════════════════════
+    function applyMarkers(text) {
+        const srcString = getCombinedSrcString();
+        if (!srcString) return text;
+        const d = fontData[selectedFont] || {};
+        const tp  = (d.top   !== null && d.top   !== undefined) ? d.top   : parseFloat(markerTop.value);
+        const lf  = (d.left  !== null && d.left  !== undefined) ? d.left  : parseFloat(markerLeft.value);
+        const sz  = (d.size  !== null && d.size  !== undefined) ? d.size  : parseFloat(markerSize.value);
+        const color = markerColor.value, desc = markerDesc.value;
+        const replacement =
+            `<span style="position: relative;"><span class="dynamic-font" style="color: ${color}; top: ${tp}px; left: ${lf}px; font-size: ${sz}px; direction: ltr;" title="${desc}">${getCombinedString()}</span></span>`;
+        // Replace all occurrences of the combined source string
+        return text.split(srcString).join(replacement);
+    }
+
+    function applyToText() {
+        previewText.style.fontSize = selectedFont + 'px';
+        updateDisplayValues();
+        previewText.innerHTML = applyMarkers(inputText.value);
+    }
+
+    // ══ PHP CODE ════════════════════════════
+    function generateCode() {
+        const color  = markerColor.value, desc = markerDesc.value;
+
+        // Source chain
+        const mbChrSrcChain = sourceChars.map(h => `mb_chr(0x${h.toUpperCase()}, 'UTF-8')`).join(' . ');
+        const srcComment = sourceChars.map((h,i)=>`//   ${i+1}. U+${h.toUpperCase()} → ${hexToChar(h)||'?'}`).join('\n');
+
+        // Target chain
+        const mbChrChain = targetChars.map(h=>`mb_chr(0x${h.toUpperCase()}, 'UTF-8')`).join(' . ');
+        const charComment = targetChars.map((h,i)=>`//   ${i+1}. U+${h.toUpperCase()} → ${hexToChar(h)||'?'}`).join('\n');
+
+        const fontLines = FONT_SIZES.map(fs => {
+            const d = fontData[fs];
+            const ok = d && (d.size!==null||d.top!==null||d.left!==null);
+            if (!ok) return `    // ${fs}px → (ayarlanmadı)`;
+            return `    ${fs} => ['size'=>${d.size??'null'}, 'top'=>${d.top??'null'}, 'left'=>${d.left??'null'}],`;
+        }).join('\n');
+
+        const code = `<?php
+// ════════════════════════════════════════
+// Kaynak karakter dizisi
+${srcComment}
+// ════════════════════════════════════════
+$sourceChar = ${mbChrSrcChain};
+
+// Hedef karakter dizisi
+${charComment}
+// ════════════════════════════════════════
+$multiChar = ${mbChrChain};
+
+// Font boyutuna göre pozisyon tablosu
+$fontPositions = [
+${fontLines}
+];
+
+$currentFontSize = $_SESSION['fontSize'] ?? 40;
+$pos = $fontPositions[$currentFontSize] ?? $fontPositions[40] ?? ['size'=>38,'top'=>0,'left'=>0];
+
+$topPosition  = $pos['top']  . 'px';
+$fontSize     = $pos['size'] . 'px';
+$leftPosition = $pos['left'] . 'px';
+$description  = '${desc}';
+$color        = '${color}';
+
+$ayet = change_reds($sourceChar, $multiChar, $ayet,
+    $topPosition, $fontSize, $leftPosition, $description, $color);
+
+function change_reds($harf, $harfc, $ayet, $top, $size, $sol, $desc, $bcol) {
+    $y_harf = "<span style='position: relative;'>"
+            . "<span class='dynamic-font' style='color: $bcol; top: $top; font-size: $size; left: $sol;' title='$desc'>$harfc</span>"
+            . "</span>";
+    return str_replace($harf, $y_harf, $ayet);
+}
+?>`;
+        generatedCode.textContent = code;
+        codeOutput.classList.add('show');
+        const range = document.createRange(); range.selectNode(generatedCode);
+        window.getSelection().removeAllRanges(); window.getSelection().addRange(range);
+
+        // ── Adjustment arrays ──
+        const buildArr = (field, varName) => {
+            const pairs = FONT_SIZES.map(fs => {
+                const d = fontData[fs];
+                const v = (d && d[field] !== null && d[field] !== undefined) ? d[field] : 'null';
+                return `${fs} => ${v}`;
+            }).join(', ');
+            return `$${varName} = [${pairs}];`;
+        };
+
+        const buildArrPx = (field, varName) => {
+            const pairs = FONT_SIZES.map(fs => {
+                const d = fontData[fs];
+                const v = (d && d[field] !== null && d[field] !== undefined) ? `'${d[field]}px'` : 'null';
+                return `${fs} => ${v}`;
+            }).join(', ');
+            return `'${varName}' => [${pairs}],`;
+        };
+
+        const allText = buildArr('top',  'topAdjustments') + '\n'
+                      + buildArr('size', 'sizeAdjustments') + '\n'
+                      + buildArr('left', 'leftAdjustments');
+
+        const allTextPx = buildArrPx('top',  'top') + '\n'
+                        + buildArrPx('size', 'size') + '\n'
+                        + buildArrPx('left', 'left');
+
+        document.getElementById('allAdjCode').textContent   = allText;
+        document.getElementById('allAdjCodePx').textContent = allTextPx;
+        document.getElementById('adjustmentBoxes').style.display = 'flex';
+        document.getElementById('nestedTopBox').style.display = 'none';
+    }
+
+    // ══ RESET ═══════════════════════════════
+    function resetValues() {
+        FONT_SIZES.forEach(f => { fontData[f] = { size: null, top: null, left: null }; });
+        selectedFont = 40; targetChars = ['0656']; sourceChars = ['06EA'];
+        markerColor.value = '#28a745'; markerDesc.value = '';
+        markerSize.value = 38; markerTop.value = 0; markerLeft.value = 0;
+        codeOutput.classList.remove('show');
+        buildFontTable(); renderSourceCharsList(); renderTargetCharsList(); saveCookie(); applyToText();
+    }
+
+    // ══ EVENTS ══════════════════════════════
+    [markerSize, markerTop, markerLeft].forEach(el => el.addEventListener('input', () => {
+        syncSelectedFromSliders(); updateDisplayValues(); applyToText();
+    }));
+    markerColor.addEventListener('input', () => { saveCookie(); applyToText(); });
+    markerDesc.addEventListener('input',  () => { saveCookie(); applyToText(); });
+    inputText.addEventListener('input',   () => { saveCookie(); applyToText(); });
+    document.getElementById('btnCenter').addEventListener('click', centerEmptyCells);
+    document.getElementById('btnAddChar').addEventListener('click', addTargetChar);
+    document.getElementById('btnRemoveChar').addEventListener('click', removeTargetChar);
+    document.getElementById('btnAddSrcChar').addEventListener('click', addSrcChar);
+    document.getElementById('btnRemoveSrcChar').addEventListener('click', removeSrcChar);
+    document.getElementById('btnGenerateCode').addEventListener('click', generateCode);
+    document.getElementById('btnApply').addEventListener('click', applyToText);
+    document.getElementById('btnReset').addEventListener('click', resetValues);
+
+    document.getElementById('btnCopyAll').addEventListener('click', function() {
+        const text = document.getElementById('allAdjCode').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            this.textContent = '✅ Kopyalandı';
+            this.classList.add('copied');
+            setTimeout(() => { this.textContent = '📋 Kopyala'; this.classList.remove('copied'); }, 2000);
+        });
+    });
+
+    document.getElementById('btnCopyAllPx').addEventListener('click', function() {
+        const text = document.getElementById('allAdjCodePx').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            this.textContent = '✅ Kopyalandı';
+            this.classList.add('copied');
+            setTimeout(() => { this.textContent = '📋 Kopyala'; this.classList.remove('copied'); }, 2000);
+        });
+    });
+
+    document.getElementById('btnCalcNested').addEventListener('click', function() {
+        const formula = document.getElementById('parentTopFormula').value.trim();
+        if (!formula) return;
+        try {
+            const pairs = FONT_SIZES.map(fs => {
+                const userTop = (fontData[fs] && fontData[fs].top !== null && fontData[fs].top !== undefined)
+                    ? fontData[fs].top : null;
+                const parentTop = Function('fs', 'return (' + formula + ')')(fs);
+                const calc = userTop !== null ? Math.round(userTop - parentTop) : 'null';
+                return `${fs} => ${calc}`;
+            }).join(', ');
+            document.getElementById('nestedTopCode').textContent = `$topAdjustments = [${pairs}];`;
+        } catch(e) {
+            document.getElementById('nestedTopCode').textContent = '⚠️ Formül hatası: ' + e.message;
+        }
+    });
+
+    document.getElementById('btnCopyNestedTop').addEventListener('click', function() {
+        const text = document.getElementById('nestedTopCode').textContent;
+        if (text === '—') return;
+        navigator.clipboard.writeText(text).then(() => {
+            this.textContent = '✅ Kopyalandı';
+            this.classList.add('copied');
+            setTimeout(() => { this.textContent = '📋 Kopyala'; this.classList.remove('copied'); }, 2000);
+        });
+    });
+
+    // ══ INIT ════════════════════════════════
+    loadCookie();
+    buildFontTable();
+    renderSourceCharsList();
+    renderTargetCharsList();
+    applyToText();
+</script>
+</body>
+</html>

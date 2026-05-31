@@ -54,28 +54,34 @@ if(isset($_POST["B2"])){
 
 					Sayın ".$c3." (". $c4 .");
 
-					Değerli kullanıcımız, quran.jappsvenska.se/uyereset.php?link=".$dognum." linkini klikleyerek şifrenizi sıfırlayabilirsiniz. Sonrasında şifrenizi tekrar oluşturabileceğiniz form açılacaktır.
+					Değerli kullanıcımız, quran.learnmate.se/uyereset.php?link=".$dognum." linkini klikleyerek şifrenizi sıfırlayabilirsiniz. Sonrasında şifrenizi tekrar oluşturabileceğiniz form açılacaktır.
 
-					not: Bu mesajın konusu quran.jappsvenska.se adresinde şifre işlemleridir. Eğer bu konu hakkında bilginiz yoksa veya konunun sizinle ilgisi yoksa mesajı lütfen dikkate almayın. 
-					Bu tür mesajları bir daha almak istemiyorsanız lüften bizimle iletişime (quran.jappsvenska.se/yeni.php) geçin.
+					not: Bu mesajın konusu quran.learnmate.se adresinde şifre işlemleridir. Eğer bu konu hakkında bilginiz yoksa veya konunun sizinle ilgisi yoksa mesajı lütfen dikkate almayın. 
+					Bu tür mesajları bir daha almak istemiyorsanız lüften bizimle iletişime (learnmate.se/yeni.php) geçin.
 					Teşekkürler.";
+					// .env dosyasını oku
+$env = parse_ini_file('/var/www/learnmate.se/.env');
 
-					require_once('vendor/autoload.php');
-					$mail = new PHPMailer(true);
+if ($env === false) {
+    error_log('Yapılandırma dosyası okunamadı');
+    die('Sistem hatası. Lütfen tekrar deneyiniz.');
+}
+require_once('vendor/autoload.php');
+$mail = new PHPMailer(true);
 
-					$mail->setFrom('info@jappsvenska.se', 'Kuran Sifre Resetleme');
-					$mail->addAddress($c4, 'yeni kullanıcı');
-					$mail->Subject = 'resetleme linki';
-					$mail->Body = $icerik;
-					$mail->isSMTP();
-					$mail->Host = 'websmtp.simply.com';
-					$mail->SMTPAuth = true;
-					$mail->Username = 'info@jappsvenska.se';
-					$mail->Password = '321maskeli'; // SMTP password
-					$mail->SMTPSecure = 'tls';
-					$mail->Port = 587;
-
-					$result = (bool) $mail->send();
+//$mail->setFrom($env['FROM_EMAIL'], $env['FROM_NAME']);
+$mail->setFrom($env['FROM_EMAIL'], 'quran.learnmate.se');
+$mail->addAddress($c4, 'yeni kullanıcı');
+$mail->Subject = 'resetleme linki';
+$mail->Body = $icerik;
+$mail->isSMTP();
+$mail->Host      = $env['SMTP_HOST'];
+$mail->SMTPAuth  = true;
+$mail->Username  = $env['SMTP_USERNAME'];
+$mail->Password  = $env['SMTP_PASSWORD'];
+$mail->SMTPSecure = $env['SMTP_SECURE'];
+$mail->Port      = (int) $env['SMTP_PORT'];
+$result = (bool) $mail->send();
 
 					echo ($result ? 'Şifre sıfırlama linki e-posta adresinize gönderildi!' : 'Resetleme linki gönderilemedi. Lütfen teknik personel ile iletişime geçin!');
 
