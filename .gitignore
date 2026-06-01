@@ -4,3 +4,6 @@ yedekdata/
 *.xls
 *.docx
 versiyon notlari.txt
+conn.php
+*.env
+.DS_Store
